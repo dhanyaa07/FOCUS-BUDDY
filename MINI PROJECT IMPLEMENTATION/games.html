@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Brain Games - ADHD Assist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="child-friendly.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating background shapes */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            width: 400px;
+            height: 400px;
+            background: #fff;
+            top: -200px;
+            right: -200px;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        body::after {
+            width: 300px;
+            height: 300px;
+            background: #fff;
+            bottom: -150px;
+            left: -150px;
+            animation: float 20s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-4px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .streak-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 900;
+            color: #2d3748;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #718096;
+            margin-bottom: 24px;
+        }
+
+        /* Progress Bar */
+        .daily-progress {
+            background: #f7fafc;
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #4a5568;
+            font-size: 14px;
+        }
+
+        .progress-bar-container {
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38b2ac 100%);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            transition: height 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-card:hover::before {
+            height: 100%;
+            opacity: 0.05;
+        }
+
+        .game-card.reaction::before {
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+        }
+
+        .game-card.memory::before {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        }
+
+        .game-card.pattern::before {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+
+        .game-card.focus::before {
+            background: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
+        }
+
+        .game-card.word::before {
+            background: linear-gradient(135deg, #10b981 0%, #84cc16 100%);
+        }
+
+        .game-card.color::before {
+            background: linear-gradient(135deg, #ef4444 0%, #ec4899 100%);
+        }
+
+        .game-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .game-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .game-desc {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+
+        .stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #a0aec0;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .play-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-family: inherit;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-btn:active {
+            transform: scale(0.98);
+        }
+
+        .game-card.reaction .play-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+        }
+
+        .game-card.memory .play-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        }
+
+        .game-card.pattern .play-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+
+        .game-card.focus .play-btn {
+            background: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
+        }
+
+        .game-card.word .play-btn {
+            background: linear-gradient(135deg, #10b981 0%, #84cc16 100%);
+        }
+
+        .game-card.color .play-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #ec4899 100%);
+        }
+
+        /* Game Modal */
+        .game-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .game-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #f7fafc;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background: #e2e8f0;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h2 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .modal-header p {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        /* Game-specific styles */
+        .reaction-box {
+            height: 200px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin: 24px 0;
+            transition: all 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .pattern-cell {
+            aspect-ratio: 1;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 3px solid #e2e8f0;
+        }
+
+        .pattern-cell:hover {
+            transform: scale(1.05);
+        }
+
+        .focus-area {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 20px;
+            margin: 24px 0;
+            overflow: hidden;
+        }
+
+        .focus-target {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.6s ease;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .focus-target:hover {
+            transform: scale(1.1);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: 3px solid #e2e8f0;
+            font-family: inherit;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 16px 0;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            margin: 8px 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .game-display {
+            font-size: 48px;
+            font-weight: 900;
+            text-align: center;
+            min-height: 80px;
+            margin: 24px 0;
+            color: #667eea;
+            letter-spacing: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .color-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .color-btn {
+            padding: 20px;
+            border-radius: 16px;
+            border: none;
+            font-weight: 800;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 16px;
+        }
+
+        .modal-stat {
+            text-align: center;
+        }
+
+        .modal-stat-value {
+            font-size: 24px;
+            font-weight: 900;
+            color: #667eea;
+        }
+
+        .modal-stat-label {
+            font-size: 12px;
+            color: #a0aec0;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* Celebration animation */
+        @keyframes celebrate {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            25% {
+                transform: scale(1.1) rotate(-5deg);
+            }
+
+            75% {
+                transform: scale(1.1) rotate(5deg);
+            }
+        }
+
+        .celebrating {
+            animation: celebrate 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <a href="index.html" class="back-link">
+                <span>←</span>
+                <span>Dashboard</span>
+            </a>
+            <div class="user-info">
+                <div class="streak-badge">🔥 0 Day Streak</div>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>🎮 Brain Training Games</h1>
+            <p>Boost your focus, memory, and cognitive skills with fun challenges!</p>
+
+            <div class="daily-progress">
+                <div class="progress-label">
+                    <span>Daily Goal</span>
+                    <span id="games-played">0 / 6 Games</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games Grid -->
+        <div class="games-grid">
+            <!-- Game 1: Reaction Time -->
+            <div class="game-card reaction" data-game="reaction">
+                <span class="game-icon">⚡</span>
+                <h3 class="game-title">Reaction Time</h3>
+                <p class="game-desc">Test your reflexes! Click as fast as you can when the box turns green.</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="reaction-best-card">--</div>
+                        <div class="stat-label">Best (ms)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="reaction-attempts-card">0</div>
+                        <div class="stat-label">Attempts</div>
+                    </div>
+                </div>
+                <button class="play-btn">Play Now</button>
+            </div>
+
+            <!-- Game 2: Number Memory -->
+            <div class="game-card memory" data-game="memory">
+                <span class="game-icon">🧠</span>
+                <h3 class="game-title">Number Memory</h3>
+                <p class="game-desc">Remember the sequence of numbers and type them back!</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="memory-level-card">1</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="memory-score-card">0</div>
+                        <div class="stat-label">Score</div>
+                    </div>
+                </div>
+                <button class="play-btn">Play Now</button>
+            </div>
+
+            <!-- Game 3: Pattern Match -->
+            <div class="game-card pattern" data-game="pattern">
+                <span class="game-icon">🔷</span>
+                <h3 class="game-title">Pattern Match</h3>
+                <p class="game-desc">Find all matching pairs as quickly as possible!</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="pattern-best-card">--</div>
+                        <div class="stat-label">Best Time</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="pattern-games-card">0</div>
+                        <div class="stat-label">Games</div>
+                    </div>
+                </div>
+                <button class="play-btn">Play Now</button>
+            </div>
+
+            <!-- Game 4: Focus Tracker -->
+            <div class="game-card focus" data-game="focus">
+                <span class="game-icon">👁️</span>
+                <h3 class="game-title">Focus Tracker</h3>
+                <p class="game-desc">Click the moving target as many times as you can in 30 seconds!</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="focus-best-card">0</div>
+                        <div class="stat-label">Best Score</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="focus-accuracy-card">0%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <button class="play-btn">Play Now</button>
+            </div>
+
+            <!-- Game 5: Word Scramble -->
+            <div class="game-card word" data-game="word">
+                <span class="game-icon">📝</span>
+                <h3 class="game-title">Word Scramble</h3>
+                <p class="game-desc">Unscramble the letters to form a word!</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="word-score-card">0</div>
+                        <div class="stat-label">Score</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="word-streak-card">0</div>
+                        <div class="stat-label">Streak</div>
+                    </div>
+                </div>
+                <button class="play-btn">Play Now</button>
+            </div>
+
+            <!-- Game 6: Color Match -->
+            <div class="game-card color" data-game="color">
+                <span class="game-icon">🎨</span>
+                <h3 class="game-title">Color Match</h3>
+                <p class="game-desc">Click the color that matches the WORD, not the text color!</p>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="color-score-card">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="color-accuracy-card">100%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+                <button class="play-btn">Play Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modals -->
+    <!-- Reaction Time Modal -->
+    <div id="modal-reaction" class="game-modal">
+        <div class="modal-content">
+            <button class="close-modal">×</button>
+            <div class="modal-header">
+                <h2>⚡ Reaction Time</h2>
+                <p>Click when the box turns green!</p>
+            </div>
+            <button id="start-reaction" class="btn btn-primary">Start Test</button>
+            <div id="reaction-box" class="reaction-box" style="background: #f7fafc; color: #718096;">
+                Click Start to begin
+            </div>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="reaction-best">--</div>
+                    <div class="modal-stat-label">Best (ms)</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="reaction-avg">--</div>
+                    <div class="modal-stat-label">Average</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="reaction-attempts">0</div>
+                    <div class="modal-stat-label">Attempts</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Number Memory Modal -->
+    <div id="modal-memory" class="game-modal">
+        <div class="modal-content">
+            <button class="close-modal">×</button>
+            <div class="modal-header">
+                <h2>🧠 Number Memory</h2>
+                <p>Remember the sequence!</p>
+            </div>
+            <div id="memory-display" class="game-display"></div>
+            <input type="text" id="memory-input" placeholder="Enter the sequence" disabled />
+            <button id="start-memory" class="btn btn-primary">Start Level 1</button>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="memory-level">1</div>
+                    <div class="modal-stat-label">Level</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="memory-score">0</div>
+                    <div class="modal-stat-label">Score</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="memory-best-level">1</div>
+                    <div class="modal-stat-label">Best Level</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pattern Match Modal -->
+    <div id="modal-pattern" class="game-modal">
+        <div class="modal-content">
+            <button class="close-modal">×</button>
+            <div class="modal-header">
+                <h2>🔷 Pattern Match</h2>
+                <p>Find all matching pairs!</p>
+            </div>
+            <div id="pattern-grid" class="pattern-grid"></div>
+            <button id="start-pattern" class="btn btn-primary">New Game</button>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="pattern-matches">0</div>
+                    <div class="modal-stat-label">Matches</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="pattern-time">0</div>
+                    <div class="modal-stat-label">Time (s)</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="pattern-best">--</div>
+                    <div class="modal-stat-label">Best Time</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Focus Tracker Modal -->
+    <div id="modal-focus" class="game-modal">
+        <div class="modal-content">
+            <button class="close-modal">×</button>
+            <div class="modal-header">
+                <h2>👁️ Focus Tracker</h2>
+                <p>Click the moving target!</p>
+            </div>
+            <div id="focus-area" class="focus-area">
+                <div id="focus-target" class="focus-target"></div>
+            </div>
+            <button id="start-focus" class="btn btn-primary">Start (30 seconds)</button>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="focus-hits">0</div>
+                    <div class="modal-stat-label">Hits</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="focus-accuracy">0%</div>
+                    <div class="modal-stat-label">Accuracy</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="focus-best">0</div>
+                    <div class="modal-stat-label">Best Score</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Word Scramble Modal -->
+    <div id="modal-word" class="game-modal">
+        <div class="modal-content">
+            <button class="close-modal">×</button>
+            <div class="modal-header">
+                <h2>📝 Word Scramble</h2>
+                <p>Unscramble the word!</p>
+            </div>
+            <div id="scrambled-word" class="game-display">CLICK START</div>
+            <input type="text" id="word-input" placeholder="Type the unscrambled word" />
+            <button id="check-word" class="btn btn-primary">Check Answer</button>
+            <button id="skip-word" class="btn btn-secondary">Skip Word</button>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="word-score">0</div>
+                    <div class="modal-stat-label">Score</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="word-streak">0</div>
+                    <div class="modal-stat-label">Streak</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="word-solved">0</div>
+                    <div class="modal-stat-label">Solved</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Color Match Modal -->
+    <div id="modal-color" class="game-modal">
+        <div class="modal-content">
+            <button class="close-modal">×</button>
+            <div class="modal-header">
+                <h2>🎨 Color Match</h2>
+                <p>Click the color that matches the WORD!</p>
+            </div>
+            <div id="color-word" class="game-display"></div>
+            <div class="color-buttons">
+                <button class="color-btn" data-color="red" style="background:#ef4444;color:white">RED</button>
+                <button class="color-btn" data-color="blue" style="background:#3b82f6;color:white">BLUE</button>
+                <button class="color-btn" data-color="green" style="background:#22c55e;color:white">GREEN</button>
+                <button class="color-btn" data-color="yellow" style="background:#eab308;color:#2d3748">YELLOW</button>
+            </div>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="color-score">0</div>
+                    <div class="modal-stat-label">Correct</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="color-accuracy">100%</div>
+                    <div class="modal-stat-label">Accuracy</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="color-total">0</div>
+                    <div class="modal-stat-label">Total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentUser = null;
+        let gamesPlayedToday = 0;
+
+        // Check auth
+        const token = localStorage.getItem('token');
+        const userData = localStorage.getItem('user');
+        if (!token || !userData) {
+            window.location.href = 'index.html';
+        } else {
+            currentUser = JSON.parse(userData);
+        }
+
+        // Modal management
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.querySelector('.play-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const game = card.dataset.game;
+                document.getElementById(`modal-${game}`).classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.closest('.game-modal').classList.remove('active');
+            });
+        });
+
+        document.querySelectorAll('.game-modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // Progress tracking
+        function updateProgress() {
+            const progress = Math.min((gamesPlayedToday / 6) * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('games-played').textContent = `${gamesPlayedToday} / 6 Games`;
+        }
+
+        function gameCompleted() {
+            if (gamesPlayedToday < 6) {
+                gamesPlayedToday++;
+                updateProgress();
+            }
+        }
+
+        // Helper to save progress
+        async function saveProgress(focusMinutes, stars) {
+            try {
+                const currentProgress = await fetch(`${API_URL}/progress/${currentUser.id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r => r.json());
+
+                await fetch(`${API_URL}/progress`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        focusMinutes: (currentProgress.focus_minutes || 0) + focusMinutes,
+                        gamesPlayed: (currentProgress.games_played || 0) + 1,
+                        relaxSessions: currentProgress.relax_sessions || 0,
+                        stars: (currentProgress.stars || 0) + stars,
+                        streak: currentProgress.streak || 0,
+                        bestReaction: currentProgress.best_reaction,
+                        heartRate: null
+                    })
+                });
+                gameCompleted();
+            } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+        }
+
+        // ===== GAME 1: REACTION TIME =====
+        let reactionTimeout, reactionStart, reactionTimes = [];
+
+        document.getElementById('start-reaction').addEventListener('click', () => {
+            const box = document.getElementById('reaction-box');
+            box.textContent = 'Wait for green...';
+            box.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
+            box.style.color = '#991b1b';
+            box.style.cursor = 'not-allowed';
+
+            if (reactionTimeout) clearTimeout(reactionTimeout);
+
+            const delay = 2000 + Math.random() * 3000;
+            reactionTimeout = setTimeout(() => {
+                box.textContent = 'CLICK NOW!';
+                box.style.background = 'linear-gradient(135deg, #10b981 0%, #84cc16 100%)';
+                box.style.color = 'white';
+                box.style.cursor = 'pointer';
+                reactionStart = performance.now();
+            }, delay);
+        });
+
+        document.getElementById('reaction-box').addEventListener('click', () => {
+            const box = document.getElementById('reaction-box');
+            if (!reactionStart) {
+                box.textContent = 'Too early! Click Start again';
+                box.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
+                box.style.color = '#991b1b';
+                if (reactionTimeout) clearTimeout(reactionTimeout);
+                return;
+            }
+
+            const time = Math.round(performance.now() - reactionStart);
+            reactionTimes.push(time);
+            box.textContent = `${time}ms - Great! 🎉`;
+            box.style.background = 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)';
+            box.style.color = '#065f46';
+
+            const best = Math.min(...reactionTimes);
+            const avg = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+
+            document.getElementById('reaction-best').textContent = best;
+            document.getElementById('reaction-avg').textContent = avg;
+            document.getElementById('reaction-attempts').textContent = reactionTimes.length;
+            document.getElementById('reaction-best-card').textContent = best;
+            document.getElementById('reaction-attempts-card').textContent = reactionTimes.length;
+
+            reactionStart = null;
+            if (reactionTimes.length % 3 === 0) saveProgress(2, 1);
+        });
+
+        // ===== GAME 2: NUMBER MEMORY =====
+        let memoryLevel = 1, memoryScore = 0, memoryBest = 1, currentSequence = '';
+
+        document.getElementById('start-memory').addEventListener('click', () => {
+            const display = document.getElementById('memory-display');
+            const input = document.getElementById('memory-input');
+            const btn = document.getElementById('start-memory');
+
+            if (input.disabled || !currentSequence) {
+                // Start new sequence
+                currentSequence = '';
+                for (let i = 0; i < memoryLevel + 2; i++) {
+                    currentSequence += Math.floor(Math.random() * 10);
+                }
+
+                display.textContent = currentSequence;
+                input.disabled = true;
+                input.value = '';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    display.textContent = '?';
+                    input.disabled = false;
+                    input.focus();
+                    btn.disabled = false;
+                    btn.textContent = 'Submit Answer';
+                }, 1000 + memoryLevel * 300);
+            } else {
+                // Check answer
+                if (input.value === currentSequence) {
+                    memoryScore += memoryLevel * 10;
+                    memoryLevel++;
+                    if (memoryLevel > memoryBest) memoryBest = memoryLevel;
+                    display.textContent = `✅ Correct! Level ${memoryLevel}`;
+                    saveProgress(3, 2);
+                } else {
+                    display.textContent = `❌ Wrong! It was: ${currentSequence}`;
+                    memoryLevel = 1;
+                }
+
+                document.getElementById('memory-level').textContent = memoryLevel;
+                document.getElementById('memory-score').textContent = memoryScore;
+                document.getElementById('memory-best-level').textContent = memoryBest;
+                document.getElementById('memory-level-card').textContent = memoryLevel;
+                document.getElementById('memory-score-card').textContent = memoryScore;
+                btn.textContent = `Start Level ${memoryLevel}`;
+                currentSequence = '';
+                input.value = '';
+            }
+        });
+
+        document.getElementById('memory-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('start-memory').click();
+        });
+
+        // ===== GAME 3: PATTERN MATCHING =====
+        let patternCards = [], patternFlipped = [], patternMatches = 0, patternStart, patternTimer, patternGames = 0;
+        const colors = ['#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7', '#ec4899', '#f97316', '#14b8a6'];
+
+        function startPattern() {
+            patternMatches = 0;
+            patternFlipped = [];
+            const grid = document.getElementById('pattern-grid');
+            grid.innerHTML = '';
+
+            patternCards = [...colors, ...colors].sort(() => Math.random() - 0.5);
+            patternCards.forEach((color, i) => {
+                const cell = document.createElement('div');
+                cell.className = 'pattern-cell';
+                cell.dataset.index = i;
+                cell.dataset.color = color;
+                cell.style.background = '#f7fafc';
+                cell.addEventListener('click', () => flipPattern(cell, i));
+                grid.appendChild(cell);
+            });
+
+            patternStart = Date.now();
+            clearInterval(patternTimer);
+            patternTimer = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - patternStart) / 1000);
+                document.getElementById('pattern-time').textContent = elapsed;
+            }, 1000);
+        }
+
+        function flipPattern(cell, index) {
+            if (patternFlipped.length >= 2 || cell.dataset.flipped) return;
+
+            cell.style.background = cell.dataset.color;
+            cell.dataset.flipped = 'true';
+            patternFlipped.push({ cell, index });
+
+            if (patternFlipped.length === 2) {
+                setTimeout(() => {
+                    if (patternFlipped[0].cell.dataset.color === patternFlipped[1].cell.dataset.color) {
+                        patternMatches++;
+                        document.getElementById('pattern-matches').textContent = patternMatches;
+                        patternFlipped = [];
+
+                        if (patternMatches === 8) {
+                            clearInterval(patternTimer);
+                            const time = Math.floor((Date.now() - patternStart) / 1000);
+                            const best = document.getElementById('pattern-best').textContent;
+                            if (best === '--' || time < parseInt(best)) {
+                                document.getElementById('pattern-best').textContent = time;
+                                document.getElementById('pattern-best-card').textContent = time + 's';
+                            }
+                            patternGames++;
+                            document.getElementById('pattern-games-card').textContent = patternGames;
+                            saveProgress(4, 3);
+                        }
+                    } else {
+                        patternFlipped.forEach(({ cell }) => {
+                            cell.style.background = '#f7fafc';
+                            delete cell.dataset.flipped;
+                        });
+                        patternFlipped = [];
+                    }
+                }, 600);
+            }
+        }
+
+        document.getElementById('start-pattern').addEventListener('click', startPattern);
+
+        // ===== GAME 4: FOCUS TRACKER =====
+        let focusHits = 0, focusClicks = 0, focusBest = 0, focusInterval, focusTimeout;
+
+        document.getElementById('start-focus').addEventListener('click', () => {
+            focusHits = 0;
+            focusClicks = 0;
+            const target = document.getElementById('focus-target');
+            const area = document.getElementById('focus-area');
+
+            document.getElementById('focus-hits').textContent = '0';
+            document.getElementById('focus-accuracy').textContent = '0%';
+
+            clearInterval(focusInterval);
+            clearTimeout(focusTimeout);
+
+            focusInterval = setInterval(() => {
+                const maxX = area.clientWidth - 50;
+                const maxY = area.clientHeight - 50;
+                target.style.left = Math.random() * maxX + 'px';
+                target.style.top = Math.random() * maxY + 'px';
+            }, 800);
+
+            focusTimeout = setTimeout(() => {
+                clearInterval(focusInterval);
+                const accuracy = focusClicks > 0 ? Math.round((focusHits / focusClicks) * 100) : 0;
+                if (focusHits > focusBest) {
+                    focusBest = focusHits;
+                    document.getElementById('focus-best').textContent = focusBest;
+                    document.getElementById('focus-best-card').textContent = focusBest;
+                }
+                document.getElementById('focus-accuracy-card').textContent = accuracy + '%';
+                saveProgress(3, 2);
+            }, 30000);
+        });
+
+        document.getElementById('focus-target').addEventListener('click', () => {
+            focusHits++;
+            focusClicks++;
+            document.getElementById('focus-hits').textContent = focusHits;
+            const accuracy = Math.round((focusHits / focusClicks) * 100);
+            document.getElementById('focus-accuracy').textContent = accuracy + '%';
+        });
+
+        document.getElementById('focus-area').addEventListener('click', (e) => {
+            if (e.target.id !== 'focus-target') {
+                focusClicks++;
+                const accuracy = Math.round((focusHits / focusClicks) * 100);
+                document.getElementById('focus-accuracy').textContent = accuracy + '%';
+            }
+        });
+
+        // ===== GAME 5: WORD SCRAMBLE =====
+        const words = ['FOCUS', 'ATTENTION', 'MEMORY', 'BRAIN', 'THINK', 'LEARN', 'PRACTICE', 'CHALLENGE', 'IMPROVE', 'CONCENTRATE', 'MINDFUL', 'COGNITIVE', 'TRAINING', 'EXERCISE', 'DEVELOP'];
+        let wordScore = 0, wordStreak = 0, wordSolved = 0, currentWord = '';
+
+        function newWord() {
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            const scrambled = currentWord.split('').sort(() => Math.random() - 0.5).join('');
+            document.getElementById('scrambled-word').textContent = scrambled;
+            document.getElementById('word-input').value = '';
+            document.getElementById('word-input').focus();
+        }
+
+        document.getElementById('check-word').addEventListener('click', () => {
+            const input = document.getElementById('word-input').value.toUpperCase();
+            const display = document.getElementById('scrambled-word');
+
+            if (input === currentWord) {
+                wordScore += 10 + wordStreak * 5;
+                wordStreak++;
+                wordSolved++;
+                display.textContent = `✅ Correct! +${10 + (wordStreak - 1) * 5}`;
+                display.classList.add('celebrating');
+                setTimeout(() => display.classList.remove('celebrating'), 500);
+                saveProgress(2, 1);
+            } else {
+                wordStreak = 0;
+                display.textContent = `❌ ${currentWord}`;
+            }
+
+            document.getElementById('word-score').textContent = wordScore;
+            document.getElementById('word-streak').textContent = wordStreak;
+            document.getElementById('word-solved').textContent = wordSolved;
+            document.getElementById('word-score-card').textContent = wordScore;
+            document.getElementById('word-streak-card').textContent = wordStreak;
+
+            setTimeout(newWord, 1500);
+        });
+
+        document.getElementById('skip-word').addEventListener('click', () => {
+            wordStreak = 0;
+            document.getElementById('word-streak').textContent = wordStreak;
+            document.getElementById('word-streak-card').textContent = wordStreak;
+            newWord();
+        });
+
+        document.getElementById('word-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('check-word').click();
+        });
+
+        newWord();
+
+        // ===== GAME 6: COLOR MATCH =====
+        let colorScore = 0, colorTotal = 0;
+        const colorWords = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+        const colorMap = { RED: '#ef4444', BLUE: '#3b82f6', GREEN: '#22c55e', YELLOW: '#eab308' };
+
+        function newColorChallenge() {
+            const word = colorWords[Math.floor(Math.random() * colorWords.length)];
+            const displayColor = colorWords[Math.floor(Math.random() * colorWords.length)];
+            const display = document.getElementById('color-word');
+            display.textContent = word;
+            display.style.color = colorMap[displayColor];
+            display.dataset.correct = word.toLowerCase();
+        }
+
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const correct = document.getElementById('color-word').dataset.correct;
+                colorTotal++;
+
+                if (btn.dataset.color === correct) {
+                    colorScore++;
+                    saveProgress(1, 1);
+                }
+
+                const accuracy = Math.round((colorScore / colorTotal) * 100);
+                document.getElementById('color-score').textContent = colorScore;
+                document.getElementById('color-total').textContent = colorTotal;
+                document.getElementById('color-accuracy').textContent = accuracy + '%';
+                document.getElementById('color-score-card').textContent = colorScore;
+                document.getElementById('color-accuracy-card').textContent = accuracy + '%';
+
+                newColorChallenge();
+            });
+        });
+
+        newColorChallenge();
+    </script>
+    <script src="gamification.js"></script>
+    <script src="mascot.js"></script>
+    <script>
+        // Integrate gamification
+        if (window.mascot) {
+            window.mascot.onActivityStart('game');
+        }
+
+        // Override saveProgress to use gamification
+        const originalSaveProgress = saveProgress;
+        saveProgress = function (focusMinutes, stars) {
+            originalSaveProgress(focusMinutes, stars);
+            if (window.gamification) {
+                window.gamification.completeActivity('game', 10);
+            }
+            if (window.mascot) {
+                window.mascot.encourage();
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Daily Reminders - ADHD Assist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --bg: #020617;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --accent: #22d3ee;
+            --radius-xl: 24px;
+            --radius-lg: 18px
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto
+        }
+
+        .header {
+            background: radial-gradient(circle at top, #0b1120, #020617);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            padding: 20px;
+            margin-bottom: 20px
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.97);
+            border: 1px solid rgba(31, 41, 55, 0.9);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px
+        }
+
+        .form-group {
+            margin-bottom: 16px
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: rgba(15, 23, 42, 0.98);
+            color: var(--text-main);
+            font-family: inherit
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 999px;
+            border: none;
+            background: radial-gradient(circle at top left, #22d3ee, #6366f1);
+            color: #020617;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px
+        }
+
+        .btn:hover {
+            opacity: 0.9
+        }
+
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.2);
+            color: var(--text-main)
+        }
+
+        .btn-danger {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+            color: white
+        }
+
+        .btn-success {
+            background: linear-gradient(to right, #22c55e, #16a34a);
+            color: white
+        }
+
+        .reminder-item {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(31, 41, 55, 0.9);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px
+        }
+
+        .reminder-item.completed {
+            opacity: 0.6;
+            border-color: rgba(34, 197, 94, 0.5)
+        }
+
+        .reminder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 8px
+        }
+
+        .reminder-title {
+            font-size: 16px;
+            font-weight: 600
+        }
+
+        .reminder-time {
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .reminder-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px
+        }
+
+        .reminder-category {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(34, 211, 238, 0.12);
+            border: 1px solid rgba(34, 211, 238, 0.5);
+            font-size: 11px;
+            margin-right: 6px
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px
+        }
+
+        .reminder-actions button {
+            padding: 6px 12px;
+            font-size: 12px
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-decoration: none
+        }
+
+        .back-link:hover {
+            text-decoration: underline
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted)
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px
+        }
+
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #86efac;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto
+        }
+
+        @media (max-width:768px) {
+            .grid-2 {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🔔 Daily Reminders</h1>
+            <p>Manage your daily routine reminders and tasks</p>
+        </div>
+
+        <div id="message-area"></div>
+
+        <!-- Create Reminder Form -->
+        <div class="card">
+            <h2 style="margin-bottom:16px;font-size:18px">Create New Reminder</h2>
+            <form id="reminder-form">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" placeholder="e.g., Morning Exercise" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time *</label>
+                        <input type="time" id="time" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" placeholder="Optional details about this reminder..."
+                        rows="3"></textarea>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="frequency">Frequency *</label>
+                        <select id="frequency" required>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="custom">Custom Days</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <option value="">-- Select category --</option>
+                            <option value="homework">Homework</option>
+                            <option value="exercise">Exercise</option>
+                            <option value="medication">Medication</option>
+                            <option value="reading">Reading</option>
+                            <option value="chores">Chores</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="days-group" style="display:none">
+                    <label>Select Days</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="day" value="monday"> Monday</label>
+                        <label><input type="checkbox" name="day" value="tuesday"> Tuesday</label>
+                        <label><input type="checkbox" name="day" value="wednesday"> Wednesday</label>
+                        <label><input type="checkbox" name="day" value="thursday"> Thursday</label>
+                        <label><input type="checkbox" name="day" value="friday"> Friday</label>
+                        <label><input type="checkbox" name="day" value="saturday"> Saturday</label>
+                        <label><input type="checkbox" name="day" value="sunday"> Sunday</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Create Reminder</button>
+            </form>
+        </div>
+
+        <!-- Reminders List -->
+        <div class="card">
+            <h2 style="margin-bottom:16px;font-size:18px">Your Reminders</h2>
+            <div id="reminders-list">
+                <div class="loading">Loading reminders...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentUser = null;
+        let allReminders = [];
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+                return false;
+            }
+
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+            }
+            return true;
+        }
+
+        // API calls
+        async function apiCall(endpoint, options = {}) {
+            const token = localStorage.getItem('token');
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            };
+
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                ...options,
+                headers: { ...headers, ...options.headers }
+            });
+
+            if (response.status === 401 || response.status === 403) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+                throw new Error('Unauthorized');
+            }
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Request failed');
+            return data;
+        }
+
+        // Show message
+        function showMessage(message, type = 'success') {
+            const messageArea = document.getElementById('message-area');
+            messageArea.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => { messageArea.innerHTML = ''; }, 5000);
+        }
+
+        // Request notification permission
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        // Show browser notification
+        function showNotification(title, body) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, { body, icon: '🔔' });
+            }
+        }
+
+        // Toggle days selection based on frequency
+        document.getElementById('frequency').addEventListener('change', (e) => {
+            const daysGroup = document.getElementById('days-group');
+            daysGroup.style.display = (e.target.value === 'weekly' || e.target.value === 'custom') ? 'block' : 'none';
+        });
+
+        // Load reminders
+        async function loadReminders() {
+            try {
+                allReminders = await apiCall(`/reminders/${currentUser.id}`);
+                displayReminders();
+            } catch (error) {
+                document.getElementById('reminders-list').innerHTML = `<div class="error">Error loading reminders: ${error.message}</div>`;
+            }
+        }
+
+        // Display reminders
+        function displayReminders() {
+            const remindersList = document.getElementById('reminders-list');
+
+            if (allReminders.length === 0) {
+                remindersList.innerHTML = '<div class="loading">No reminders yet. Create one above!</div>';
+                return;
+            }
+
+            remindersList.innerHTML = allReminders.map(reminder => `
+        <div class="reminder-item ${reminder.completed_today ? 'completed' : ''}">
+          <div class="reminder-header">
+            <div>
+              <div class="reminder-title">${reminder.title}</div>
+              <div class="reminder-time">⏰ ${reminder.time}</div>
+            </div>
+            <div>
+              ${reminder.completed_today ? '<span style="color:#22c55e">✓ Completed</span>' : ''}
+            </div>
+          </div>
+          ${reminder.description ? `<div style="margin-bottom:8px;color:var(--text-muted);font-size:13px">${reminder.description}</div>` : ''}
+          <div class="reminder-meta">
+            ${reminder.category ? `<span class="reminder-category">${reminder.category}</span>` : ''}
+            <span>${reminder.frequency.charAt(0).toUpperCase() + reminder.frequency.slice(1)}</span>
+            ${reminder.days ? ` • ${reminder.days}` : ''}
+            ${reminder.active ? '' : ' • <span style="color:#ef4444">Inactive</span>'}
+          </div>
+          <div class="reminder-actions">
+            ${!reminder.completed_today ? `<button class="btn btn-success" onclick="completeReminder(${reminder.id})">Mark Complete</button>` : ''}
+            <button class="btn btn-secondary" onclick="toggleReminder(${reminder.id}, ${reminder.active})">${reminder.active ? 'Deactivate' : 'Activate'}</button>
+            <button class="btn btn-danger" onclick="deleteReminder(${reminder.id})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+        }
+
+        // Create reminder
+        document.getElementById('reminder-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const time = document.getElementById('time').value;
+            const description = document.getElementById('description').value;
+            const frequency = document.getElementById('frequency').value;
+            const category = document.getElementById('category').value;
+
+            let days = null;
+            if (frequency === 'weekly' || frequency === 'custom') {
+                const selectedDays = Array.from(document.querySelectorAll('input[name="day"]:checked'))
+                    .map(cb => cb.value);
+                if (selectedDays.length === 0) {
+                    showMessage('Please select at least one day', 'error');
+                    return;
+                }
+                days = selectedDays.join(',');
+            }
+
+            try {
+                await apiCall('/reminders', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        title,
+                        time,
+                        description: description || null,
+                        frequency,
+                        days,
+                        category: category || null
+                    })
+                });
+
+                showMessage('Reminder created successfully!');
+                document.getElementById('reminder-form').reset();
+                document.getElementById('days-group').style.display = 'none';
+                loadReminders();
+            } catch (error) {
+                showMessage('Error creating reminder: ' + error.message, 'error');
+            }
+        });
+
+        // Complete reminder
+        async function completeReminder(reminderId) {
+            try {
+                await apiCall(`/reminders/${reminderId}/complete`, { method: 'POST' });
+                showMessage('Great job! Reminder marked as complete! 🎉');
+                loadReminders();
+            } catch (error) {
+                showMessage('Error completing reminder: ' + error.message, 'error');
+            }
+        }
+
+        // Toggle reminder active status
+        async function toggleReminder(reminderId, currentStatus) {
+            try {
+                await apiCall(`/reminders/${reminderId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ active: !currentStatus })
+                });
+                showMessage(`Reminder ${currentStatus ? 'deactivated' : 'activated'} successfully!`);
+                loadReminders();
+            } catch (error) {
+                showMessage('Error updating reminder: ' + error.message, 'error');
+            }
+        }
+
+        // Delete reminder
+        async function deleteReminder(reminderId) {
+            if (!confirm('Are you sure you want to delete this reminder?')) return;
+
+            try {
+                await apiCall(`/reminders/${reminderId}`, { method: 'DELETE' });
+                showMessage('Reminder deleted successfully!');
+                loadReminders();
+            } catch (error) {
+                showMessage('Error deleting reminder: ' + error.message, 'error');
+            }
+        }
+
+        // Check for due reminders periodically
+        function checkDueReminders() {
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            allReminders.forEach(reminder => {
+                if (reminder.active && !reminder.completed_today && reminder.time === currentTime) {
+                    showNotification('Reminder: ' + reminder.title, reminder.description || 'Time to complete your task!');
+                }
+            });
+        }
+
+        // Initialize
+        if (checkAuth()) {
+            requestNotificationPermission();
+            loadReminders();
+
+            // Check for due reminders every minute
+            setInterval(checkDueReminders, 60000);
+        }
+    </script>
+</body>
+
+</html>

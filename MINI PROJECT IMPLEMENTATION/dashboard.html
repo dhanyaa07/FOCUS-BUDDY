@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>ADHD Assist - Your Learning Journey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="child-friendly.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 3px solid white;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Learning Path */
+        .learning-path {
+            background: white;
+            border-radius: 30px;
+            padding: 40px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .path-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .path-header h2 {
+            font-size: 36px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .path-header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .path-container {
+            position: relative;
+            min-height: 600px;
+        }
+
+        .path-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+
+        .path-node {
+            position: relative;
+            margin: 40px auto;
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 5px solid #667eea;
+            z-index: 2;
+        }
+
+        .path-node:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .path-node.completed {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #ffd700;
+        }
+
+        .path-node.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .path-node.locked:hover {
+            transform: none;
+        }
+
+        .node-label {
+            position: absolute;
+            bottom: -35px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .action-icon {
+            font-size: 56px;
+            margin-bottom: 15px;
+        }
+
+        .action-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .action-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Daily Goal */
+        .daily-goal {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .daily-goal h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .goal-progress {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            height: 40px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .goal-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .goal-text {
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Achievements Preview */
+        .achievements-preview {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievements-preview h3 {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .path-node {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="logo">🧠 ADHD Assist</div>
+            <div class="user-info">
+                <div class="user-avatar" id="user-avatar">👤</div>
+                <div class="user-name" id="user-name">Loading...</div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Gamification Header -->
+        <div class="gamification-header">
+            <div class="level-display">
+                <div class="level-badge" id="level-badge">1</div>
+                <div class="level-info">
+                    <h2 id="level-text">Level 1</h2>
+                    <p>Keep going, superstar!</p>
+                </div>
+            </div>
+            <div class="xp-bar-container">
+                <div class="xp-bar" id="xp-bar" style="width: 0%"></div>
+                <div class="xp-text" id="xp-text">0 / 100 XP</div>
+            </div>
+            <div class="streak-display" id="streak-text">
+                🔥 0 day streak
+            </div>
+        </div>
+
+        <!-- Daily Goal -->
+        <div class="daily-goal">
+            <h3>🎯 Today's Goal: Complete 3 Activities!</h3>
+            <div class="goal-progress">
+                <div class="goal-bar" id="goal-bar" style="width: 0%">
+                    <span id="goal-progress-text">0/3</span>
+                </div>
+            </div>
+            <div class="goal-text">You're doing great! Keep it up!</div>
+        </div>
+
+        <!-- Learning Path -->
+        <div class="learning-path">
+            <div class="path-header">
+                <h2>Your Learning Journey</h2>
+                <p>Click on any activity to start your adventure!</p>
+            </div>
+            <div class="path-container">
+                <div class="path-line"></div>
+
+                <div class="path-node completed" onclick="window.location.href='games.html'">
+                    🎮
+                    <div class="node-label">Brain Games</div>
+                </div>
+
+                <div class="path-node" onclick="window.location.href='therapy.html'">
+                    🎨
+                    <div class="node-label">Therapy Fun</div>
+                </div>
+
+                <div class="path-node" onclick="window.location.href='relax.html'">
+                    🧘
+                    <div class="node-label">Relax & Chill</div>
+                </div>
+
+                <div class="path-node" onclick="window.location.href='ml-emotion.html'">
+                    😊
+                    <div class="node-label">Emotion Check</div>
+                </div>
+
+                <div class="path-node" onclick="window.location.href='reminders.html'">
+                    🔔
+                    <div class="node-label">My Reminders</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="window.location.href='games.html'">
+                <div class="action-icon">🎮</div>
+                <div class="action-title">Play Games</div>
+                <div class="action-desc">6 fun brain training games!</div>
+            </div>
+
+            <div class="action-card" onclick="window.location.href='therapy.html'">
+                <div class="action-icon">🌈</div>
+                <div class="action-title">Therapy Time</div>
+                <div class="action-desc">Art, music, and more!</div>
+            </div>
+
+            <div class="action-card" onclick="window.location.href='ml-emotion.html'">
+                <div class="action-icon">🤖</div>
+                <div class="action-title">Emotion AI</div>
+                <div class="action-desc">See how you're feeling!</div>
+            </div>
+
+            <div class="action-card" onclick="window.location.href='relax.html'">
+                <div class="action-icon">🎵</div>
+                <div class="action-title">Relax Zone</div>
+                <div class="action-desc">Music, stories, breathing</div>
+            </div>
+
+            <div class="action-card" onclick="openADHDDetection()">
+                <div class="action-icon">🔍</div>
+                <div class="action-title">ADHD Detection</div>
+                <div class="action-desc">Quick screening assessment</div>
+            </div>
+        </div>
+
+        <!-- Achievements Preview -->
+        <div class="achievements-preview">
+            <h3>🏆 Your Achievements</h3>
+            <div class="achievement-grid" id="achievement-grid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ADHD Detection Modal -->
+    <div id="adhd-modal"
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 1000; padding: 20px; overflow-y: auto;">
+        <div
+            style="max-width: 700px; margin: 40px auto; background: white; border-radius: 30px; padding: 40px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); position: relative;">
+            <button onclick="closeADHDDetection()"
+                style="position: absolute; top: 20px; right: 20px; background: #f3f4f6; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 24px; cursor: pointer; transition: all 0.2s;">×</button>
+
+            <!-- Welcome Screen -->
+            <div id="adhd-welcome" style="text-align: center;">
+                <div style="font-size: 80px; margin-bottom: 20px;">🔍</div>
+                <h2 style="font-size: 32px; color: #667eea; margin-bottom: 15px; font-weight: 800;">ADHD Screening
+                    Assessment</h2>
+                <p style="font-size: 16px; color: #666; line-height: 1.6; margin-bottom: 25px;">This quick 10-question
+                    screening helps identify potential ADHD symptoms in children. Answer honestly based on your child's
+                    behavior over the past 6 months.</p>
+
+                <div
+                    style="background: linear-gradient(135deg, #fff3cd, #ffe69c); border-radius: 20px; padding: 20px; margin-bottom: 25px; border-left: 5px solid #ffc107;">
+                    <p style="font-size: 14px; color: #856404; margin: 0; font-weight: 600;">⚠️ Important: This is a
+                        screening tool, NOT a diagnosis. Please consult a healthcare professional for proper evaluation.
+                    </p>
+                </div>
+
+                <button onclick="startAssessment()"
+                    style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 16px 40px; border-radius: 25px; font-size: 18px; font-weight: 800; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">Start
+                    Assessment</button>
+            </div>
+
+            <!-- Questions Screen -->
+            <div id="adhd-questions" style="display: none;">
+                <div
+                    style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 20px; padding: 15px; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: white;">
+                        <span style="font-weight: 700; font-size: 16px;">Question <span id="current-question">1</span>
+                            of 10</span>
+                        <span style="font-weight: 700; font-size: 16px;"><span id="progress-percent">10</span>%</span>
+                    </div>
+                    <div
+                        style="background: rgba(255, 255, 255, 0.3); height: 8px; border-radius: 10px; margin-top: 10px; overflow: hidden;">
+                        <div id="progress-bar"
+                            style="background: white; height: 100%; width: 10%; transition: width 0.3s; border-radius: 10px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="question-container">
+                    <h3 id="question-text"
+                        style="font-size: 22px; color: #333; margin-bottom: 25px; font-weight: 700; line-height: 1.4;">
+                    </h3>
+
+                    <div style="display: grid; gap: 12px;">
+                        <button class="answer-btn" onclick="selectAnswer(0)"
+                            style="background: white; border: 3px solid #e2e8f0; border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: left; color: #333;">
+                            <span style="color: #667eea; margin-right: 10px;">●</span> Never
+                        </button>
+                        <button class="answer-btn" onclick="selectAnswer(1)"
+                            style="background: white; border: 3px solid #e2e8f0; border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: left; color: #333;">
+                            <span style="color: #667eea; margin-right: 10px;">●</span> Sometimes
+                        </button>
+                        <button class="answer-btn" onclick="selectAnswer(2)"
+                            style="background: white; border: 3px solid #e2e8f0; border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: left; color: #333;">
+                            <span style="color: #667eea; margin-right: 10px;">●</span> Often
+                        </button>
+                        <button class="answer-btn" onclick="selectAnswer(3)"
+                            style="background: white; border: 3px solid #e2e8f0; border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: left; color: #333;">
+                            <span style="color: #667eea; margin-right: 10px;">●</span> Very Often
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="adhd-results" style="display: none; text-align: center;">
+                <div style="font-size: 80px; margin-bottom: 20px;" id="result-icon">📊</div>
+                <h2 style="font-size: 32px; color: #667eea; margin-bottom: 15px; font-weight: 800;">Assessment Complete!
+                </h2>
+
+                <div
+                    style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 20px; padding: 30px; margin-bottom: 25px;">
+                    <div style="font-size: 48px; font-weight: 900; color: #667eea; margin-bottom: 10px;"
+                        id="total-score">0</div>
+                    <div style="font-size: 16px; color: #666; font-weight: 600;">out of 30 points</div>
+                </div>
+
+                <div id="result-message"
+                    style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; border: 3px solid #e2e8f0; text-align: left;">
+                    <h3 style="color: #667eea; font-size: 20px; margin-bottom: 12px; font-weight: 800;">Interpretation:
+                    </h3>
+                    <p id="result-text" style="color: #666; line-height: 1.6; font-size: 16px; margin-bottom: 15px;">
+                    </p>
+                    <p id="result-recommendation" style="color: #666; line-height: 1.6; font-size: 16px;"></p>
+                </div>
+
+                <div
+                    style="background: linear-gradient(135deg, #fff3cd, #ffe69c); border-radius: 20px; padding: 20px; margin-bottom: 25px; border-left: 5px solid #ffc107;">
+                    <p style="font-size: 14px; color: #856404; margin: 0; font-weight: 600;">⚠️ Remember: This screening
+                        is not a diagnosis. Please consult with a qualified healthcare professional for a comprehensive
+                        evaluation.</p>
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="closeADHDDetection()"
+                        style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 14px 30px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;">Close</button>
+                    <button onclick="retakeAssessment()"
+                        style="background: white; color: #667eea; border: 3px solid #667eea; padding: 14px 30px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;">Retake
+                        Assessment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .answer-btn:hover {
+            border-color: #667eea !important;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe) !important;
+            transform: translateX(5px);
+        }
+    </style>
+
+    <script>
+        // ADHD Detection Assessment
+        const adhdQuestions = [
+            "Does your child have trouble paying attention to details or make careless mistakes?",
+            "Does your child have difficulty staying focused on tasks or play activities?",
+            "Does your child seem not to listen when spoken to directly?",
+            "Does your child have trouble organizing tasks and activities?",
+            "Does your child avoid or dislike tasks that require sustained mental effort?",
+            "Does your child fidget with hands or feet, or squirm when sitting?",
+            "Does your child have difficulty staying seated when expected to remain seated?",
+            "Does your child run about or climb excessively in inappropriate situations?",
+            "Does your child have trouble waiting their turn in games or group situations?",
+            "Does your child interrupt or intrude on others' conversations or games?"
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let totalScore = 0;
+
+        function openADHDDetection() {
+            document.getElementById('adhd-modal').style.display = 'block';
+            document.getElementById('adhd-welcome').style.display = 'block';
+            document.getElementById('adhd-questions').style.display = 'none';
+            document.getElementById('adhd-results').style.display = 'none';
+        }
+
+        function closeADHDDetection() {
+            document.getElementById('adhd-modal').style.display = 'none';
+            currentQuestionIndex = 0;
+            answers = [];
+            totalScore = 0;
+        }
+
+        function startAssessment() {
+            document.getElementById('adhd-welcome').style.display = 'none';
+            document.getElementById('adhd-questions').style.display = 'block';
+            currentQuestionIndex = 0;
+            answers = [];
+            totalScore = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex < adhdQuestions.length) {
+                document.getElementById('question-text').textContent = adhdQuestions[currentQuestionIndex];
+                document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+                const progress = ((currentQuestionIndex + 1) / adhdQuestions.length) * 100;
+                document.getElementById('progress-percent').textContent = Math.round(progress);
+                document.getElementById('progress-bar').style.width = progress + '%';
+            }
+        }
+
+        function selectAnswer(score) {
+            answers.push(score);
+            totalScore += score;
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < adhdQuestions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('adhd-questions').style.display = 'none';
+            document.getElementById('adhd-results').style.display = 'block';
+            document.getElementById('total-score').textContent = totalScore;
+
+            let icon, message, recommendation;
+
+            if (totalScore <= 10) {
+                icon = '✅';
+                message = 'Low likelihood of ADHD symptoms. Your child shows minimal signs based on this screening.';
+                recommendation = 'Continue monitoring your child\'s behavior. If you have concerns, consult with a healthcare professional.';
+            } else if (totalScore <= 20) {
+                icon = '⚠️';
+                message = 'Moderate ADHD symptoms detected. Your child shows some signs that may warrant further evaluation.';
+                recommendation = 'We recommend consulting with a pediatrician or child psychologist for a comprehensive assessment. Early intervention can be very helpful.';
+            } else {
+                icon = '🔴';
+                message = 'High ADHD symptoms detected. Your child shows significant signs that strongly suggest the need for professional evaluation.';
+                recommendation = 'We strongly recommend scheduling an appointment with a qualified healthcare professional (pediatrician, child psychiatrist, or psychologist) for a thorough ADHD evaluation and potential treatment options.';
+            }
+
+            document.getElementById('result-icon').textContent = icon;
+            document.getElementById('result-text').textContent = message;
+            document.getElementById('result-recommendation').textContent = recommendation;
+        }
+
+        function retakeAssessment() {
+            startAssessment();
+        }
+    </script>
+
+    <script src="gamification.js"></script>
+    <script src="mascot.js"></script>
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentUser = null;
+
+        // Check auth
+        const token = localStorage.getItem('token');
+        const userData = localStorage.getItem('user');
+        if (!token || !userData) {
+            window.location.href = 'index.html';
+        } else {
+            currentUser = JSON.parse(userData);
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        // Initialize gamification
+        if (window.gamification) {
+            window.gamification.updateUI();
+
+            // Update daily goal
+            const stats = window.gamification.getStats();
+            const totalToday = stats.totalActivities % 3; // Reset daily
+            const goalProgress = Math.min((totalToday / 3) * 100, 100);
+            document.getElementById('goal-bar').style.width = goalProgress + '%';
+            document.getElementById('goal-progress-text').textContent = `${totalToday}/3`;
+
+            // Load achievements
+            const achievements = window.gamification.getAchievementsList();
+            const achievementGrid = document.getElementById('achievement-grid');
+
+            achievements.slice(0, 8).forEach(achievement => {
+                const badge = document.createElement('div');
+                badge.className = 'achievement-badge ' + (achievement.earned ? 'earned' : 'locked');
+                badge.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-name">${achievement.name}</div>
+                `;
+                badge.title = achievement.description;
+                achievementGrid.appendChild(badge);
+            });
+        }
+
+        // Welcome message from mascot
+        setTimeout(() => {
+            if (window.mascot) {
+                const hour = new Date().getHours();
+                let greeting = 'Hi there!';
+                if (hour < 12) greeting = 'Good morning!';
+                else if (hour < 18) greeting = 'Good afternoon!';
+                else greeting = 'Good evening!';
+
+                window.mascot.showMessage(`${greeting} Ready to have some fun today? 🎉`);
+            }
+        }, 1000);
+
+        // Random tips from mascot
+        setInterval(() => {
+            if (window.mascot && Math.random() > 0.7) {
+                window.mascot.tip();
+            }
+        }, 60000); // Every minute, 30% chance
+    </script>
+</body>
+
+</html>

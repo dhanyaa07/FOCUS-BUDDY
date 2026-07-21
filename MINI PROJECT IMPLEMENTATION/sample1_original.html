@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>ADHD Assist – Enhanced Cognitive Training App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --accent: #22d3ee;
+      --radius-xl: 24px;
+      --radius-lg: 18px
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text-main);
+      min-height: 100vh
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .login-card,
+    .view {
+      background: radial-gradient(circle at top, #0b1120, #020617);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 18px
+    }
+
+    .login-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 20%, #22d3ee, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #020617
+    }
+
+    .login-title {
+      font-size: 20px;
+      font-weight: 700
+    }
+
+    .chip {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: #cbd5f5;
+      font-size: 11px
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 6px 0
+    }
+
+    input,
+    select {
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text-main)
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 9px;
+      border-radius: 999px;
+      border: none;
+      background: radial-gradient(circle at top left, #22d3ee, #6366f1);
+      color: #020617;
+      font-weight: 600
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 4px 8px;
+      position: sticky;
+      top: 0;
+      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.85), transparent);
+      backdrop-filter: blur(12px);
+      z-index: 10
+    }
+
+    .app-body {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 14px
+    }
+
+    .sidebar {
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(15, 23, 42, 0.9)
+    }
+
+    .nav-btn {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      width: 100%;
+      text-align: left
+    }
+
+    .nav-btn.active {
+      background: rgba(34, 211, 238, 0.12);
+      color: var(--text-main)
+    }
+
+    .card {
+      padding: 10px;
+      border-radius: var(--radius-lg);
+      background: rgba(15, 23, 42, 0.97);
+      border: 1px solid rgba(31, 41, 55, 0.9)
+    }
+
+    .games-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 10px
+    }
+
+    .games-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px
+    }
+
+    .game-tab {
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.95);
+      font-size: 13px
+    }
+
+    .game-tab.active {
+      background: rgba(34, 211, 238, 0.12);
+      border-color: rgba(34, 211, 238, 0.9)
+    }
+
+    .game-panel {
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(31, 41, 55, 0.9)
+    }
+
+    .reaction-box {
+      height: 100px;
+      border-radius: 14px;
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none
+    }
+
+    .stroop-btn {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700
+    }
+
+    .stars-row {
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    .star {
+      font-size: 20px
+    }
+
+    @media (max-width:900px) {
+      .app-body {
+        grid-template-columns: 1fr
+      }
+
+      .games-layout {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-card" style="max-width:480px;margin:24px auto">
+      <div class="login-header">
+        <div class="logo-icon">A</div>
+        <div>
+          <div class="login-title">ADHD Assist — Enhanced</div>
+          <div style="font-size:12px;color:var(--text-muted)">Now with more games, soothing audio, parent messaging &
+            health demo</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:6px;margin-bottom:12px">
+        <div class="chip">Soothing music</div>
+        <div class="chip">Heart-rate demo</div>
+        <div class="chip">Parent messaging</div>
+      </div>
+
+      <form id="login-form">
+        <div class="field">
+          <label for="child-name">Child Name</label>
+          <input id="child-name" type="text" placeholder="Enter child name" required />
+        </div>
+
+        <div class="field">
+          <label for="parent-email">Parent / Guardian Email</label>
+          <input id="parent-email" type="email" placeholder="parent@example.com" required />
+        </div>
+
+        <div class="field">
+          <label for="profile-type">Login as</label>
+          <select id="profile-type">
+            <option value="child">Child</option>
+            <option value="parent">Parent</option>
+            <option value="therapist">Therapist</option>
+          </select>
+        </div>
+
+        <div
+          style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:var(--text-muted)">
+          <span>Demo only — no real accounts</span><span>🎧 music demo</span>
+        </div>
+
+        <button type="submit" class="login-btn" style="margin-top:12px">Continue to Dashboard</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div id="app-shell" class="hidden">
+    <div class="page">
+      <header class="app-header">
+        <div>
+          <div style="font-weight:700">ADHD Assist — Enhanced</div>
+          <div style="font-size:12px;color:var(--text-muted)">Hello, <span id="child-name-display"></span> · Play &
+            relax</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="display:flex;flex-direction:column;align-items:flex-end">
+            <div style="font-size:12px;color:var(--text-muted)" id="profile-type-display">Child profile</div>
+            <div style="font-size:11px;color:var(--text-muted)">Stars <span id="stars-count">0</span> · Streak <span
+                id="streak-count">0</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <button id="music-toggle" class="login-btn" style="padding:8px 10px">Play Soothing Music</button>
+            <button id="logout-btn" class="login-btn"
+              style="background:transparent;color:var(--text-muted);margin-top:6px;padding:6px 8px;border:1px solid rgba(148,163,184,0.6)">Log
+              out</button>
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+              <div style="font-size:20px;font-weight:700" id="hr-display">--</div>
+              <div style="font-size:12px;color:var(--text-muted)">bpm</div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:8px">
+              <button id="hr-start" class="login-btn" style="padding:6px 10px">Start HR Demo</button>
+              <button id="hr-stop" class="login-btn"
+                style="padding:6px 10px;background:rgba(255,255,255,0.06)">Stop</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="card">
+            <div style="font-weight:700">Parent messaging</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:6px">Send a quick progress message to the
+              registered parent email.</div>
+            <button id="send-parent-msg" class="login-btn" style="margin-top:8px">Send progress to parent</button>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:6px">(Opens mail client — demo)</div>
+          </div>
+          </aside>
+
+          <main style="display:flex;flex-direction:column;gap:12px">
+            <!-- DASHBOARD -->
+            <section id="view-dashboard" class="view">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div>
+                  <div style="font-weight:700">Today's Overview</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Quick snapshot of practice, stars, and alerts
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <div class="stars-row"><span class="star">⭐</span><span id="stars-count-display">0</span></div>
+                  <div style="font-size:12px;color:var(--text-muted)">Streak: <span id="streak-display">0</span> days
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+                <div class="card">
+                  <div style="font-weight:700">Focus minutes</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:6px">Minutes spent in cognitive practice
+                  </div>
+                  <div style="font-size:20px;font-weight:700;margin-top:8px" id="stat-focus-minutes">0</div>
+                </div>
+                <div class="card">
+                  <div style="font-weight:700">Games played</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:6px">Number of game sessions today</div>
+                  <div style="font-size:20px;font-weight:700;margin-top:8px" id="stat-games-played">0</div>
+                </div>
+                <div class="card">
+                  <div style="font-weight:700">Relax sessions</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:6px">Times the calm routine was used
+                  </div>
+                  <div style="font-size:20px;font-weight:700;margin-top:8px" id="stat-relax-sessions">0</div>
+                </div>
+                <div class="card">
+                  <div style="font-weight:700">Health Alerts</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:6px" id="health-alert">No alerts</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- GAMES -->
+            <section id="view-games" class="view hidden">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div>
+                  <div style="font-weight:700">Games — Focus & Memory</div>
+                  <div style="font-size:12px;color:var(--text-muted)">New games added: Stroop, Simon Says, Balloon Focus
+                  </div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <div style="font-size:12px;color:var(--text-muted)">Stars earned: <span id="stars-earned">0</span>
+                  </div>
+                  <div style="font-size:12px;color:var(--text-muted);">Max sessions/day: <span
+                      id="max-sessions-display">5</span></div>
+                </div>
+              </div>
+
+              <div class="games-layout">
+                <div>
+                  <div class="games-tabs">
+                    <button class="game-tab active" data-game="reaction-panel">Reaction Light</button>
+                    <button class="game-tab" data-game="stroop-panel">Stroop</button>
+                    <button class="game-tab" data-game="simon-panel">Simon Says</button>
+                    <button class="game-tab" data-game="balloon-panel">Balloon Focus</button>
+                  </div>
+
+                  <!-- Reaction -->
+                  <div id="reaction-panel" class="game-panel">
+                    <div style="font-weight:700">Reaction Light</div>
+                    <div style="font-size:13px;color:var(--text-muted);margin-top:6px">Tap when it turns green.</div>
+                    <button id="start-reaction" class="login-btn" style="margin-top:8px;padding:8px 10px">Start</button>
+                    <div id="reaction-box" class="reaction-box" style="margin-top:8px">Click Start</div>
+                    <div id="reaction-status" style="margin-top:8px;color:var(--text-muted)">Best: -</div>
+                  </div>
+
+                  <!-- Stroop -->
+                  <div id="stroop-panel" class="game-panel hidden">
+                    <div style="font-weight:700">Stroop Color Challenge</div>
+                    <div style="font-size:13px;color:var(--text-muted);margin-top:6px">Tap the color that matches the
+                      <em>text meaning</em>, not the font color.
+                    </div>
+                    <div id="stroop-word" style="font-size:28px;font-weight:800;margin-top:12px;text-align:center">BLUE
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:center">
+                      <button class="stroop-btn" data-color="red">Red</button>
+                      <button class="stroop-btn" data-color="blue">Blue</button>
+                      <button class="stroop-btn" data-color="green">Green</button>
+                      <button class="stroop-btn" data-color="yellow">Yellow</button>
+                    </div>
+                    <div id="stroop-status" style="margin-top:8px;color:var(--text-muted)">Score: 0 · Attempts: 0</div>
+                  </div>
+
+                  <!-- Simon Says -->
+                  <div id="simon-panel" class="game-panel hidden">
+                    <div style="font-weight:700">Simon Says — Repeat the sequence</div>
+                    <div style="font-size:13px;color:var(--text-muted);margin-top:6px">Watch the lights and repeat.
+                    </div>
+                    <div style="display:flex;gap:6px;margin-top:10px;justify-content:center">
+                      <div class="simon-pad" data-color="red"
+                        style="width:60px;height:60px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(148,163,184,0.5);">
+                        🔴</div>
+                      <div class="simon-pad" data-color="green"
+                        style="width:60px;height:60px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(148,163,184,0.5);">
+                        🟢</div>
+                      <div class="simon-pad" data-color="blue"
+                        style="width:60px;height:60px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(148,163,184,0.5);">
+                        🔵</div>
+                      <div class="simon-pad" data-color="yellow"
+                        style="width:60px;height:60px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(148,163,184,0.5);">
+                        🟡</div>
+                    </div>
+                    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+                      <button id="simon-start" class="login-btn">Start Sequence</button>
+                      <div id="simon-status" style="align-self:center;color:var(--text-muted)">Level: 0</div>
+                    </div>
+                  </div>
+
+                  <!-- Balloon Focus -->
+                  <div id="balloon-panel" class="game-panel hidden">
+                    <div style="font-weight:700">Balloon Focus</div>
+                    <div style="font-size:13px;color:var(--text-muted);margin-top:6px">Keep the balloon growing by NOT
+                      tapping — stay calm and focused.</div>
+                    <div id="balloon"
+                      style="width:100px;height:120px;border-radius:999px;background:linear-gradient(#ffd1dc,#ff7ab6);margin:18px auto;display:flex;align-items:center;justify-content:center;font-weight:800">
+                      🎈</div>
+                    <div style="text-align:center"><button id="start-balloon" class="login-btn">Start Balloon</button>
+                    </div>
+                    <div id="balloon-status" style="margin-top:8px;color:var(--text-muted);text-align:center">Score: 0
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right side tips / rewards -->
+                <div class="card">
+                  <div style="font-weight:700">Rewards & Tips</div>
+                  <div style="font-size:13px;color:var(--text-muted);margin-top:8px">Earn stars for finishing games and
+                    calm sessions. Share progress with parents.</div>
+                  <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+                    <div style="font-size:22px">⭐</div>
+                    <div>Stars: <strong id="stars">0</strong></div>
+                  </div>
+                  <div style="margin-top:8px"><button id="claim-badge" class="login-btn">Claim badge (demo)</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- PROGRESS -->
+            <section id="view-progress" class="view hidden">
+              <div style="font-weight:700">Progress & Reports</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:8px">Download or send weekly summaries to
+                parent (demo).</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button id="download-report" class="login-btn">Download report (TXT)</button>
+                <button id="email-report" class="login-btn">Email report (mailto)</button>
+              </div>
+            </section>
+
+            <!-- RELAX -->
+            <section id="view-relax" class="view hidden">
+              <div style="font-weight:700">Relax & Calm Corner</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:8px">Guided breathing and soothing audio.
+                Music plays automatically when stress is detected.</div>
+              <div style="margin-top:10px" class="card">
+                <div style="font-weight:700">Breathing steps</div>
+                <ol style="margin-top:8px;color:var(--text-muted)">
+                  <li>Breathe in for 4 seconds</li>
+                  <li>Hold for 4 seconds</li>
+                  <li>Breathe out for 4 seconds</li>
+                  <li>Repeat 4 times</li>
+                </ol>
+                <div style="margin-top:8px"><button id="add-relax" class="login-btn">Complete one calm cycle</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- THERAPIST -->
+            <section id="view-therapist" class="view hidden">
+              <div style="font-weight:700">Therapist / Parent View</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:8px">Summary metrics and quick notes for
+                clinical review.</div>
+              <table style="width:100%;margin-top:10px;border-collapse:collapse;color:var(--text-main)">
+                <tr style="border-bottom:1px solid rgba(148,163,184,0.08)">
+                  <td>Focus minutes</td>
+                  <td id="t-focus">0</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(148,163,184,0.08)">
+                  <td>Games played</td>
+                  <td id="t-games">0</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(148,163,184,0.08)">
+                  <td>Relax sessions</td>
+                  <td id="t-relax">0</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(148,163,184,0.08)">
+                  <td>Recent HR</td>
+                  <td id="t-hr">--</td>
+                </tr>
+              </table>
+            </section>
+
+            <!-- SETTINGS -->
+            <section id="view-settings" class="view hidden">
+              <div style="font-weight:700">Settings</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:8px">Configure goals & controls (demo
+                storage
+                only).</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px">
+                <div>
+                  <label>Daily focus goal (minutes)</label>
+                  <input id="target-minutes" type="number" min="5" max="60" value="15" />
+                </div>
+                <div>
+                  <label>Max sessions per day</label>
+                  <input id="max-sessions" type="number" min="1" max="10" value="5" />
+                </div>
+              </div>
+              <div style="margin-top:8px"><button id="save-settings" class="login-btn">Save settings</button></div>
+            </section>
+          </main>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    // Base state
+    const state = {
+      childName: '',
+      parentEmail: '',
+      profileType: 'child',
+      focusMinutes: 0,
+      gamesPlayed: 0,
+      relaxSessions: 0,
+      targetMinutes: 15,
+      maxSessions: 5,
+      stars: 0,
+      streak: 0,
+      bestReaction: null,
+      heartRate: null
+    };
+
+    // Elements & small helpers
+    const loginForm = document.getElementById('login-form');
+    const loginScreen = document.getElementById('login-screen');
+    const appShell = document.getElementById('app-shell');
+    const childNameInput = document.getElementById('child-name');
+    const parentEmailInput = document.getElementById('parent-email');
+    const profileTypeInput = document.getElementById('profile-type');
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const views = document.querySelectorAll('.view');
+
+    // music via WebAudio
+    let audioCtx = null;
+    let musicPlaying = false;
+    let musicInterval = null;
+    let _musicNodes = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playSoothing() {
+      initAudio();
+      if (musicPlaying) return;
+      musicPlaying = true;
+      const osc1 = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+      osc1.frequency.value = 220;
+      osc2.frequency.value = 330;
+      gain.gain.value = 0.0001;
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc1.start();
+      osc2.start();
+      // ramp up
+      gain.gain.exponentialRampToValueAtTime(0.05, audioCtx.currentTime + 2);
+      // gentle melodic sequence
+      let idx = 0;
+      const notes = [261.6, 329.6, 392.0, 523.3];
+      musicInterval = setInterval(() => {
+        const f = notes[idx % notes.length];
+        osc1.frequency.setValueAtTime(f, audioCtx.currentTime);
+        osc2.frequency.setValueAtTime(f * 1.5, audioCtx.currentTime);
+        idx++;
+      }, 1200);
+      _musicNodes = { osc1, osc2, gain };
+    }
+
+    function stopSoothing() {
+      if (!musicPlaying) return;
+      musicPlaying = false;
+      clearInterval(musicInterval);
+      musicInterval = null;
+      if (_musicNodes) {
+        const { osc1, osc2, gain } = _musicNodes;
+        // ramp down then stop
+        try {
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
+        } catch (_) {
+          // fallback if ramp fails
+          gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + 1);
+        }
+        setTimeout(() => {
+          try { osc1.stop(); } catch (e) { }
+          try { osc2.stop(); } catch (e) { }
+          try { osc1.disconnect(); osc2.disconnect(); gain.disconnect(); } catch (e) { }
+        }, 1100);
+        _musicNodes = null;
+      }
+    }
+
+    document.getElementById('music-toggle').addEventListener('click', () => {
+      if (!musicPlaying) {
+        playSoothing();
+        document.getElementById('music-toggle').textContent = 'Pause Soothing Music';
+      } else {
+        stopSoothing();
+        document.getElementById('music-toggle').textContent = 'Play Soothing Music';
+      }
+    });
+
+    // login
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const cn = childNameInput.value.trim();
+      const pe = parentEmailInput.value.trim();
+      if (!cn || !pe) return alert('Enter name & parent email');
+      state.childName = cn;
+      state.parentEmail = pe;
+      state.profileType = profileTypeInput.value;
+      loginScreen.classList.add('hidden');
+      appShell.classList.remove('hidden');
+      setupHeader();
+      updateDashboard();
+      updateTherapist();
+      document.getElementById('max-sessions-display').textContent = state.maxSessions;
+    });
+
+    function setupHeader() {
+      document.getElementById('child-name-display').textContent = state.childName;
+      document.getElementById('profile-type-display').textContent = state.profileType + ' profile';
+      document.getElementById('stars-count').textContent = state.stars;
+      document.getElementById('streak-count').textContent = state.streak;
+      document.getElementById('stars-count-display').textContent = state.stars;
+      document.getElementById('streak-display').textContent = state.streak;
+      document.getElementById('stars-earned').textContent = state.stars;
+      document.getElementById('stars').textContent = state.stars;
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', () => { location.reload(); });
+
+    // navigation
+    navButtons.forEach(btn => btn.addEventListener('click', () => {
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.getAttribute('data-view');
+      views.forEach(v => {
+        if (v.id === target) v.classList.remove('hidden'); else v.classList.add('hidden');
+      });
+    }));
+
+    // Dashboard update
+    function updateDashboard() {
+      document.getElementById('stat-focus-minutes').textContent = state.focusMinutes;
+      document.getElementById('stat-games-played').textContent = state.gamesPlayed;
+      document.getElementById('stat-relax-sessions').textContent = state.relaxSessions;
+      document.getElementById('stars').textContent = state.stars;
+      document.getElementById('t-focus').textContent = state.focusMinutes;
+      document.getElementById('t-games').textContent = state.gamesPlayed;
+      document.getElementById('t-relax').textContent = state.relaxSessions;
+      document.getElementById('t-hr').textContent = state.heartRate === null ? '--' : state.heartRate + ' bpm';
+      setupHeader();
+    }
+
+    function updateTherapist() {
+      document.getElementById('t-focus').textContent = state.focusMinutes;
+      document.getElementById('t-games').textContent = state.gamesPlayed;
+      document.getElementById('t-relax').textContent = state.relaxSessions;
+      document.getElementById('t-hr').textContent = state.heartRate === null ? '--' : state.heartRate + ' bpm';
+    }
+
+    // ----------------- Games logic -----------------
+    // Reaction
+    let reactionTimeout = null;
+    let waitingForGreen = false;
+    let startTime = 0;
+    document.getElementById('start-reaction').addEventListener('click', () => {
+      if (reactionTimeout) clearTimeout(reactionTimeout);
+      waitingForGreen = false;
+      const box = document.getElementById('reaction-box');
+      box.textContent = 'Wait...';
+      box.style.background = '';
+      const delay = 1000 + Math.random() * 3000;
+      reactionTimeout = setTimeout(() => {
+        waitingForGreen = true;
+        startTime = performance.now();
+        box.textContent = 'Tap now!';
+        box.style.background = 'linear-gradient(#22d3ee,#4ade80)';
+      }, delay);
+    });
+
+    document.getElementById('reaction-box').addEventListener('click', () => {
+      const box = document.getElementById('reaction-box');
+      if (!waitingForGreen) {
+        if (reactionTimeout) { clearTimeout(reactionTimeout); }
+        box.textContent = 'Too early!';
+        return;
+      }
+      const reactionTime = Math.round(performance.now() - startTime);
+      box.textContent = 'Your time: ' + reactionTime + ' ms';
+      if (state.bestReaction === null || reactionTime < state.bestReaction) state.bestReaction = reactionTime;
+      document.getElementById('reaction-status').textContent = 'Best: ' + state.bestReaction + ' ms';
+      state.gamesPlayed += 1;
+      state.focusMinutes += 3;
+      awardStar(1);
+      updateDashboard();
+      waitingForGreen = false;
+    });
+
+    // Stroop
+    const stroopWord = document.getElementById('stroop-word');
+    const stroopButtons = document.querySelectorAll('.stroop-btn');
+    let stroopScore = 0, stroopAttempts = 0;
+    function newStroopRound() {
+      const colors = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+      const colorMap = { RED: 'red', BLUE: 'blue', GREEN: 'green', YELLOW: 'yellow' };
+      const word = colors[Math.floor(Math.random() * colors.length)];
+      let display = colors[Math.floor(Math.random() * colors.length)];
+      // sometimes allow same display color; it's fine
+      stroopWord.textContent = word;
+      stroopWord.style.color = colorMap[display];
+    }
+    stroopButtons.forEach(btn => btn.addEventListener('click', () => {
+      const selected = btn.dataset.color.toUpperCase();
+      stroopAttempts++;
+      if (selected === stroopWord.textContent) {
+        stroopScore++;
+        awardStar(1);
+        state.focusMinutes += 2;
+        state.gamesPlayed += 1;
+      } else {
+        // no penalty beyond attempt count
+      }
+      document.getElementById('stroop-status').textContent = 'Score: ' + stroopScore + ' · Attempts: ' + stroopAttempts;
+      newStroopRound();
+      updateDashboard();
+    }));
+    newStroopRound();
+
+    // Simon Says
+    const simonPads = document.querySelectorAll('.simon-pad');
+    let simonSequence = [], simonInput = [], simonLevel = 0;
+    let simonPlaying = false;
+    function flashPad(color) {
+      const pad = Array.from(simonPads).find(p => p.dataset.color === color);
+      if (!pad) return;
+      pad.style.transform = 'scale(1.08)';
+      setTimeout(() => { pad.style.transform = ''; }, 400);
+    }
+    async function playSimonSequence() {
+      simonPlaying = true;
+      for (const c of simonSequence) {
+        flashPad(c);
+        await new Promise(r => setTimeout(r, 600));
+      }
+      simonPlaying = false;
+      simonInput = [];
+      document.getElementById('simon-status').textContent = 'Repeat the sequence';
+    }
+    document.getElementById('simon-start').addEventListener('click', () => {
+      simonLevel++;
+      document.getElementById('simon-status').textContent = 'Level: ' + simonLevel;
+      simonSequence.push(['red', 'green', 'blue', 'yellow'][Math.floor(Math.random() * 4)]);
+      setTimeout(() => playSimonSequence(), 400);
+    });
+    simonPads.forEach(p => p.addEventListener('click', () => {
+      if (simonPlaying) return;
+      if (simonSequence.length === 0) { document.getElementById('simon-status').textContent = 'Press Start'; return; }
+      const color = p.dataset.color;
+      simonInput.push(color);
+      flashPad(color);
+      const idx = simonInput.length - 1;
+      if (simonInput[idx] !== simonSequence[idx]) {
+        document.getElementById('simon-status').textContent = 'Wrong — try again';
+        simonLevel = 0;
+        simonSequence = [];
+        simonInput = [];
+        return;
+      }
+      if (simonInput.length === simonSequence.length) {
+        document.getElementById('simon-status').textContent = 'Good — level cleared';
+        state.gamesPlayed += 1;
+        state.focusMinutes += 4;
+        awardStar(2);
+        updateDashboard();
+      }
+    }));
+
+    // Balloon Focus
+    let balloonTimer = null;
+    let balloonSize = 100;
+    let balloonScore = 0;
+    let balloonRunning = false;
+    const balloonEl = document.getElementById('balloon');
+
+    function updateBalloon() {
+      const el = balloonEl;
+      el.style.width = balloonSize + 'px';
+      el.style.height = (balloonSize * 1.15) + 'px';
+    }
+
+    // attach click penalty once
+    balloonEl.addEventListener('click', () => {
+      if (balloonRunning) {
+        clearInterval(balloonTimer);
+        balloonRunning = false;
+        document.getElementById('balloon-status').textContent = 'Oops — tapped too soon!';
+      }
+    });
+
+    document.getElementById('start-balloon').addEventListener('click', () => {
+      if (balloonRunning) {
+        clearInterval(balloonTimer);
+        balloonRunning = false;
+        document.getElementById('balloon-status').textContent = 'Stopped';
+        return;
+      }
+      balloonRunning = true;
+      balloonSize = 100;
+      balloonScore = 0;
+      updateBalloon();
+      document.getElementById('balloon-status').textContent = 'Focus on the balloon — do NOT tap the screen';
+      balloonTimer = setInterval(() => {
+        balloonSize += 6;
+        updateBalloon();
+        balloonScore++;
+        if (balloonSize > 260) {
+          clearInterval(balloonTimer);
+          balloonRunning = false;
+          state.gamesPlayed += 1;
+          state.focusMinutes += 5;
+          awardStar(3);
+          document.getElementById('balloon-status').textContent = 'Balloon matured! Score:' + balloonScore;
+          updateDashboard();
+        }
+      }, 800);
+    });
+
+    // Award star and track streak - single, cleaned implementation
+    function awardStar(n) {
+      state.stars += n;
+      state.streak += 1;
+      updateDashboard();
+      // every multiple of 5 stars prompt quick send
+      if (state.stars > 0 && state.stars % 5 === 0) {
+        setTimeout(() => {
+          if (confirm('You earned ' + state.stars + ' stars! Send a quick update to parent?')) {
+            sendParentMessage();
+          }
+        }, 50);
+      }
+    }
+
+    document.getElementById('claim-badge').addEventListener('click', () => { alert('Badge claimed! (demo)'); });
+
+    // Relax cycles
+    document.getElementById('add-relax').addEventListener('click', () => {
+      state.relaxSessions += 1;
+      awardStar(1);
+      updateDashboard();
+    });
+
+    // Settings save
+    document.getElementById('save-settings').addEventListener('click', () => {
+      const t = parseInt(document.getElementById('target-minutes').value, 10);
+      const m = parseInt(document.getElementById('max-sessions').value, 10);
+      if (!isNaN(t)) state.targetMinutes = t;
+      if (!isNaN(m)) state.maxSessions = m;
+      document.getElementById('max-sessions-display').textContent = state.maxSessions;
+      alert('Settings saved (demo)');
+    });
+
+    // Progress report download (simple TXT)
+    document.getElementById('download-report').addEventListener('click', () => {
+      const txt = `Report for ${state.childName}
+Focus minutes: ${state.focusMinutes}
+Games: ${state.gamesPlayed}
+Relax sessions: ${state.relaxSessions}
+Stars: ${state.stars}
+Recent HR: ${state.heartRate || '--'}`;
+      const blob = new Blob([txt], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `report_${state.childName || 'child'}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Email report via mailto
+    document.getElementById('email-report').addEventListener('click', () => { sendParentMessage(); });
+
+    // Send parent message — composes mailto with details and health alert if HR high
+    function sendParentMessage() {
+      const to = state.parentEmail || '';
+      const subject = encodeURIComponent(`Progress update for ${state.childName}`);
+      let body = `Hello,
+
+Here is a quick update for ${state.childName}:
+- Focus minutes: ${state.focusMinutes}
+- Games played: ${state.gamesPlayed}
+- Relax sessions: ${state.relaxSessions}
+- Stars: ${state.stars}
+`;
+      if (state.heartRate && state.heartRate > 110) {
+        body += `
+
+Note: The wearable demo measured an elevated heart rate (${state.heartRate} bpm). Consider a calm-down session.
+`;
+      }
+      body += `
+
+Regards,
+ADHD Assist (demo)`;
+      const mailto = `mailto:${to}?subject=${subject}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    }
+
+    document.getElementById('send-parent-msg').addEventListener('click', sendParentMessage);
+
+    // Start/stop HR demo (simulated values)
+    let hrTimer = null;
+    document.getElementById('hr-start').addEventListener('click', () => {
+      if (hrTimer) return;
+      hrTimer = setInterval(() => {
+        // simple simulated HR: baseline 75, random spikes
+        const spike = Math.random() < 0.08 ? Math.floor(Math.random() * 50) + 30 : 0;
+        const hr = 75 + Math.floor(Math.random() * 18) + spike;
+        state.heartRate = hr;
+        document.getElementById('hr-display').textContent = hr;
+        document.getElementById('t-hr').textContent = hr + ' bpm';
+        if (hr > 110) {
+          const alertText = `Elevated heart rate (${hr} bpm) measured in demo for ${state.childName}. Consider calming activities.`;
+          document.getElementById('health-alert').textContent = alertText;
+          navTo('view-relax');
+          if (!musicPlaying) {
+            playSoothing();
+            document.getElementById('music-toggle').textContent = 'Pause Soothing Music';
+          }
+        } else {
+          document.getElementById('health-alert').textContent = 'No alerts';
+        }
+      }, 2500);
+    });
+
+    document.getElementById('hr-stop').addEventListener('click', () => {
+      if (hrTimer) clearInterval(hrTimer);
+      hrTimer = null;
+      document.getElementById('hr-display').textContent = '--';
+      state.heartRate = null;
+      document.getElementById('health-alert').textContent = 'No alerts';
+      document.getElementById('t-hr').textContent = '--';
+    });
+
+    // utility nav function used by HR alert
+    function navTo(id) {
+      navButtons.forEach(b => {
+        if (b.getAttribute('data-view') === id) { b.classList.add('active'); } else b.classList.remove('active');
+      });
+      views.forEach(v => {
+        if (v.id === id) v.classList.remove('hidden'); else v.classList.add('hidden');
+      });
+    }
+
+    // simple UI for game tabs
+    const gameTabs = document.querySelectorAll('.game-tab');
+    const panels = {
+      'reaction-panel': document.getElementById('reaction-panel'),
+      'stroop-panel': document.getElementById('stroop-panel'),
+      'simon-panel': document.getElementById('simon-panel'),
+      'balloon-panel': document.getElementById('balloon-panel')
+    };
+    gameTabs.forEach(tab => tab.addEventListener('click', () => {
+      gameTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.getAttribute('data-game');
+      Object.keys(panels).forEach(k => {
+        if (k === target) panels[k].classList.remove('hidden'); else panels[k].classList.add('hidden');
+      });
+    }));
+
+    // initialize small values
+    updateDashboard();
+  </script>
+</body>
+
+</html>

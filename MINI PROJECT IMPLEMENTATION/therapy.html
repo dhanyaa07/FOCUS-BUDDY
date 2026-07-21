@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Therapy & Consultation - ADHD Assist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="child-friendly.css" />
+    <style>
+        body {
+            font-family: 'Nunito', 'Fredoka One', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .header {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: #666;
+        }
+
+        .therapy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .therapy-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 4px solid transparent;
+        }
+
+        .therapy-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .therapy-card.art {
+            border-color: #ec4899;
+        }
+
+        .therapy-card.art:hover {
+            background: linear-gradient(135deg, #fce7f3, #fff);
+        }
+
+        .therapy-card.music {
+            border-color: #3b82f6;
+        }
+
+        .therapy-card.music:hover {
+            background: linear-gradient(135deg, #dbeafe, #fff);
+        }
+
+        .therapy-card.play {
+            border-color: #10b981;
+        }
+
+        .therapy-card.play:hover {
+            background: linear-gradient(135deg, #d1fae5, #fff);
+        }
+
+        .therapy-card.cbt {
+            border-color: #f59e0b;
+        }
+
+        .therapy-card.cbt:hover {
+            background: linear-gradient(135deg, #fef3c7, #fff);
+        }
+
+        .therapy-card.mindfulness {
+            border-color: #14b8a6;
+        }
+
+        .therapy-card.mindfulness:hover {
+            background: linear-gradient(135deg, #ccfbf1, #fff);
+        }
+
+        .therapy-card.physical {
+            border-color: #ef4444;
+        }
+
+        .therapy-card.physical:hover {
+            background: linear-gradient(135deg, #fee2e2, #fff);
+        }
+
+        .therapy-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .therapy-icon {
+            font-size: 64px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .therapy-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #333;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .therapy-desc {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .therapy-activities {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 3px solid #f0f0f0;
+        }
+
+        .therapy-activities.active {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .activity-btn {
+            width: 100%;
+            padding: 18px 24px;
+            margin-bottom: 12px;
+            border-radius: 20px;
+            border: 3px solid #e5e7eb;
+            background: #f9fafb;
+            color: #333;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 16px;
+        }
+
+        .activity-btn:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: translateX(8px) scale(1.02);
+        }
+
+        .btn-primary {
+            padding: 15px 30px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .btn-art {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        }
+
+        .btn-music {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #10b981, #84cc16);
+        }
+
+        .btn-cbt {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+        }
+
+        .btn-mindfulness {
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
+        }
+
+        .btn-physical {
+            background: linear-gradient(135deg, #ef4444, #ec4899);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Drawing Canvas */
+        .drawing-canvas {
+            width: 100%;
+            height: 300px;
+            background: white;
+            border-radius: 20px;
+            cursor: crosshair;
+            margin: 16px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #e5e7eb;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-btn:hover,
+        .color-btn.active {
+            border-color: #667eea;
+            transform: scale(1.2);
+        }
+
+        /* Activity Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(102, 126, 234, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #667eea;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .close-btn {
+            background: #f3f4f6;
+            border: none;
+            color: #666;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .stats-card {
+            background: white;
+            border: 4px solid #667eea;
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 64px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .therapy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .therapy-icon {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🌈 Therapy & Consultation</h1>
+            <p>Explore different therapy activities designed to help you thrive!</p>
+        </div>
+
+        <div class="therapy-grid">
+            <!-- Art Therapy -->
+            <div class="therapy-card art" data-therapy="art">
+                <div class="therapy-header">
+                    <div class="therapy-icon">🎨</div>
+                    <div class="therapy-title">Art Therapy</div>
+                </div>
+                <div class="therapy-desc">
+                    Express yourself through colors, shapes, and creativity. Art therapy helps you communicate feelings
+                    and reduce stress through creative activities.
+                </div>
+                <button class="btn-primary btn-art" onclick="toggleActivities('art')">Explore Activities</button>
+
+                <div class="therapy-activities" id="art-activities">
+                    <button class="activity-btn" onclick="openActivity('drawing')">
+                        <span>✏️</span> Free Drawing Canvas
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('coloring')">
+                        <span>🖍️</span> Mindful Coloring
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('emotion-art')">
+                        <span>😊</span> Emotion Expression Art
+                    </button>
+                </div>
+            </div>
+
+            <!-- Music Therapy -->
+            <div class="therapy-card music" data-therapy="music">
+                <div class="therapy-header">
+                    <div class="therapy-icon">🎵</div>
+                    <div class="therapy-title">Music Therapy</div>
+                </div>
+                <div class="therapy-desc">
+                    Use rhythm, melody, and sound to improve focus and emotional regulation. Music therapy engages your
+                    brain in unique and powerful ways.
+                </div>
+                <button class="btn-primary btn-music" onclick="toggleActivities('music')">Explore Activities</button>
+
+                <div class="therapy-activities" id="music-activities">
+                    <button class="activity-btn" onclick="openActivity('rhythm')">
+                        <span>🥁</span> Rhythm Matching Game
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('instrument')">
+                        <span>🎹</span> Virtual Instrument
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('music-mood')">
+                        <span>🎧</span> Mood-Based Playlists
+                    </button>
+                </div>
+            </div>
+
+            <!-- Play Therapy -->
+            <div class="therapy-card play" data-therapy="play">
+                <div class="therapy-header">
+                    <div class="therapy-icon">🎮</div>
+                    <div class="therapy-title">Play Therapy</div>
+                </div>
+                <div class="therapy-desc">
+                    Learn through play! Interactive games and activities that help develop social skills,
+                    problem-solving, and emotional understanding.
+                </div>
+                <button class="btn-primary btn-play" onclick="toggleActivities('play')">Explore Activities</button>
+
+                <div class="therapy-activities" id="play-activities">
+                    <button class="activity-btn" onclick="openActivity('role-play')">
+                        <span>🎭</span> Role-Playing Scenarios
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('puppet')">
+                        <span>🧸</span> Puppet Theater
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('story-building')">
+                        <span>📚</span> Story Building Game
+                    </button>
+                </div>
+            </div>
+
+            <!-- CBT Therapy -->
+            <div class="therapy-card cbt" data-therapy="cbt">
+                <div class="therapy-header">
+                    <div class="therapy-icon">🧠</div>
+                    <div class="therapy-title">CBT Therapy</div>
+                </div>
+                <div class="therapy-desc">
+                    Cognitive Behavioral Therapy helps you understand your thoughts and feelings. Learn strategies to
+                    manage challenges and build positive thinking patterns.
+                </div>
+                <button class="btn-primary btn-cbt" onclick="toggleActivities('cbt')">Explore Activities</button>
+
+                <div class="therapy-activities" id="cbt-activities">
+                    <button class="activity-btn" onclick="openActivity('thought-tracker')">
+                        <span>💭</span> Thought Tracker
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('emotion-wheel')">
+                        <span>🎡</span> Emotion Wheel
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('coping-cards')">
+                        <span>🃏</span> Coping Strategy Cards
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mindfulness Therapy -->
+            <div class="therapy-card mindfulness" data-therapy="mindfulness">
+                <div class="therapy-header">
+                    <div class="therapy-icon">🧘</div>
+                    <div class="therapy-title">Mindfulness</div>
+                </div>
+                <div class="therapy-desc">
+                    Practice being present in the moment. Mindfulness activities help calm your mind, reduce anxiety,
+                    and improve focus through awareness exercises.
+                </div>
+                <button class="btn-primary btn-mindfulness" onclick="toggleActivities('mindfulness')">Explore
+                    Activities</button>
+
+                <div class="therapy-activities" id="mindfulness-activities">
+                    <button class="activity-btn" onclick="openActivity('body-scan')">
+                        <span>🌟</span> Body Scan Meditation
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('mindful-jar')">
+                        <span>🫙</span> Calming Glitter Jar
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('five-senses')">
+                        <span>👁️</span> Five Senses Exercise
+                    </button>
+                </div>
+            </div>
+
+            <!-- Physical Activity Therapy -->
+            <div class="therapy-card physical" data-therapy="physical">
+                <div class="therapy-header">
+                    <div class="therapy-icon">⚡</div>
+                    <div class="therapy-title">Physical Activity</div>
+                </div>
+                <div class="therapy-desc">
+                    Move your body to boost your mood! Physical activities help release energy, improve concentration,
+                    and promote overall well-being.
+                </div>
+                <button class="btn-primary btn-physical" onclick="toggleActivities('physical')">Explore
+                    Activities</button>
+
+                <div class="therapy-activities" id="physical-activities">
+                    <button class="activity-btn" onclick="openActivity('yoga')">
+                        <span>🧘‍♀️</span> Kids Yoga Poses
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('dance')">
+                        <span>💃</span> Dance Party
+                    </button>
+                    <button class="activity-btn" onclick="openActivity('energy-release')">
+                        <span>🏃</span> Energy Release Exercises
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Stats -->
+        <div class="stats-card">
+            <div class="stat-number" id="therapy-sessions">0</div>
+            <div class="stat-label">Therapy Sessions Completed Today</div>
+        </div>
+    </div>
+
+    <!-- Activity Modal -->
+    <div class="modal" id="activity-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">Activity</div>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div id="modal-body">
+                <!-- Activity content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentUser = null;
+        let therapySessions = 0;
+
+        // Check auth
+        const token = localStorage.getItem('token');
+        const userData = localStorage.getItem('user');
+        if (!token || !userData) {
+            window.location.href = 'index.html';
+        } else {
+            currentUser = JSON.parse(userData);
+            loadProgress();
+        }
+
+        function toggleActivities(therapy) {
+            const activities = document.getElementById(`${therapy}-activities`);
+            const isActive = activities.classList.contains('active');
+
+            // Close all activities
+            document.querySelectorAll('.therapy-activities').forEach(a => a.classList.remove('active'));
+
+            // Open clicked one if it wasn't active
+            if (!isActive) {
+                activities.classList.add('active');
+            }
+        }
+
+        function openActivity(activityType) {
+            const modal = document.getElementById('activity-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+
+            modal.classList.add('active');
+
+            // Activity content based on type
+            const activities = {
+                'drawing': {
+                    title: '✏️ Free Drawing Canvas',
+                    content: `
+                        <div class="color-palette">
+                            <button class="color-btn active" style="background: #000000" onclick="setColor('#000000')"></button>
+                            <button class="color-btn" style="background: #ef4444" onclick="setColor('#ef4444')"></button>
+                            <button class="color-btn" style="background: #f59e0b" onclick="setColor('#f59e0b')"></button>
+                            <button class="color-btn" style="background: #10b981" onclick="setColor('#10b981')"></button>
+                            <button class="color-btn" style="background: #3b82f6" onclick="setColor('#3b82f6')"></button>
+                            <button class="color-btn" style="background: #8b5cf6" onclick="setColor('#8b5cf6')"></button>
+                            <button class="color-btn" style="background: #ec4899" onclick="setColor('#ec4899')"></button>
+                        </div>
+                        <canvas id="drawing-canvas" class="drawing-canvas"></canvas>
+                        <button class="btn-primary btn-art" onclick="clearCanvas()" style="margin-top: 12px;">Clear Canvas</button>
+                        <button class="btn-primary btn-art" onclick="saveDrawing()" style="margin-top: 12px; margin-left: 8px;">Save Drawing</button>
+                    `
+                },
+                'coloring': {
+                    title: '🖍️ Mindful Coloring',
+                    content: `
+                        <p style="color: var(--text-muted); margin-bottom: 16px;">Choose a pattern and color mindfully, focusing on each stroke.</p>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                            <div style="padding: 20px; background: white; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 80px;">🌸</div>
+                                <p style="color: #000; margin-top: 8px;">Flower Pattern</p>
+                            </div>
+                            <div style="padding: 20px; background: white; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 80px;">🦋</div>
+                                <p style="color: #000; margin-top: 8px;">Butterfly Pattern</p>
+                            </div>
+                        </div>
+                    `
+                },
+                'emotion-art': {
+                    title: '😊 Emotion Expression Art',
+                    content: `
+                        <p style="color: var(--text-muted); margin-bottom: 16px;">Draw or paint how you're feeling right now. There's no right or wrong!</p>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;">
+                            <button class="activity-btn" style="font-size: 32px;">😊</button>
+                            <button class="activity-btn" style="font-size: 32px;">😢</button>
+                            <button class="activity-btn" style="font-size: 32px;">😠</button>
+                            <button class="activity-btn" style="font-size: 32px;">😰</button>
+                            <button class="activity-btn" style="font-size: 32px;">😴</button>
+                            <button class="activity-btn" style="font-size: 32px;">🤗</button>
+                        </div>
+                        <canvas id="emotion-canvas" class="drawing-canvas"></canvas>
+                    `
+                },
+                'rhythm': {
+                    title: '🥁 Rhythm Matching Game',
+                    content: `
+                        <p style="color: var(--text-muted); margin-bottom: 16px;">Listen to the rhythm and tap it back!</p>
+                        <div style="text-align: center; padding: 40px;">
+                            <div style="font-size: 80px; margin-bottom: 20px;">🥁</div>
+                            <button class="btn-primary btn-music" onclick="playRhythm()">Play Rhythm</button>
+                            <div id="rhythm-display" style="margin-top: 20px; font-size: 24px; min-height: 40px;"></div>
+                        </div>
+                    `
+                },
+                'instrument': {
+                    title: '🎹 Virtual Instrument',
+                    content: `
+                        <p style="color: var(--text-muted); margin-bottom: 16px;">Create your own music!</p>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                            ${['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C2'].map((note, i) => `
+                                <button class="activity-btn" onclick="playNote(${261.63 * Math.pow(2, i / 7)})" style="padding: 30px; font-size: 20px; justify-content: center;">${note}</button>
+                            `).join('')}
+                        </div>
+                    `
+                },
+                'music-mood': {
+                    title: '🎧 Mood-Based Playlists',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Choose music that matches your mood and listen to calming playlists!</p>
+                        
+                        <div id="playlist-container">
+                            <div style="margin-bottom: 20px;">
+                                <button class="activity-btn" onclick="loadPlaylist('happy')" style="margin-bottom: 8px;">🌞 Happy & Energetic</button>
+                                <button class="activity-btn" onclick="loadPlaylist('calm')" style="margin-bottom: 8px;">😌 Calm & Peaceful</button>
+                                <button class="activity-btn" onclick="loadPlaylist('focus')" style="margin-bottom: 8px;">💪 Motivated & Focused</button>
+                                <button class="activity-btn" onclick="loadPlaylist('sleep')" style="margin-bottom: 8px;">😴 Sleepy & Relaxed</button>
+                            </div>
+                            <div id="music-player" style="display: none; background: #f3f4f6; border-radius: 15px; padding: 20px; margin-top: 15px;">
+                                <h4 id="playlist-title" style="color: #667eea; margin-bottom: 15px;"></h4>
+                                <div id="player-embed"></div>
+                            </div>
+                        </div>
+                    `
+                },
+                'role-play': {
+                    title: '🎭 Role-Playing Scenarios',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Practice social situations through role-playing! Choose a scenario:</p>
+                        
+                        <div id="scenario-container">
+                            <button class="activity-btn" onclick="showScenario('friend')" style="margin-bottom: 8px;">👋 Making New Friends</button>
+                            <button class="activity-btn" onclick="showScenario('share')" style="margin-bottom: 8px;">🤝 Sharing and Taking Turns</button>
+                            <button class="activity-btn" onclick="showScenario('feelings')" style="margin-bottom: 8px;">💬 Expressing Feelings</button>
+                            <button class="activity-btn" onclick="showScenario('problem')" style="margin-bottom: 8px;">🧩 Solving Problems Together</button>
+                        </div>
+                        
+                        <div id="scenario-display" style="display: none; background: #f3f4f6; border-radius: 15px; padding: 20px; margin-top: 15px;">
+                            <h4 id="scenario-title" style="color: #667eea; margin-bottom: 12px;"></h4>
+                            <p id="scenario-desc" style="color: #666; line-height: 1.6; margin-bottom: 15px;"></p>
+                            <div id="scenario-steps" style="background: white; padding: 15px; border-radius: 10px;"></div>
+                        </div>
+                    `
+                },
+                'puppet': {
+                    title: '🧸 Puppet Theater',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Create your own puppet show! Choose your characters and tell a story!</p>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px;">Choose Your Puppets:</h4>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+                                <button class="puppet-btn" onclick="selectPuppet('🐻')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🐻</button>
+                                <button class="puppet-btn" onclick="selectPuppet('🐰')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🐰</button>
+                                <button class="puppet-btn" onclick="selectPuppet('🦊')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🦊</button>
+                                <button class="puppet-btn" onclick="selectPuppet('🐸')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🐸</button>
+                                <button class="puppet-btn" onclick="selectPuppet('🐼')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🐼</button>
+                                <button class="puppet-btn" onclick="selectPuppet('🦁')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🦁</button>
+                                <button class="puppet-btn" onclick="selectPuppet('🐶')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🐶</button>
+                                <button class="puppet-btn" onclick="selectPuppet('🐱')" style="font-size: 40px; padding: 15px; border: 3px solid #e5e7eb; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s;">🐱</button>
+                            </div>
+                        </div>
+                        
+                        <div id="puppet-stage" style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; padding: 30px; min-height: 200px; text-align: center; margin-bottom: 15px;">
+                            <div id="puppet-display" style="font-size: 80px; margin-bottom: 15px;">🎭</div>
+                            <div id="puppet-dialogue" style="background: white; border-radius: 10px; padding: 15px; color: #333; min-height: 60px; display: flex; align-items: center; justify-content: center;">Select puppets to start your show!</div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <input id="puppet-text" type="text" placeholder="What does your puppet say?" onkeypress="if(event.key==='Enter') puppetSpeak()" style="flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #e5e7eb; font-size: 16px;">
+                            <button class="btn-primary btn-play" onclick="puppetSpeak()">💬 Speak</button>
+                        </div>
+                    `
+                },
+                'story-building': {
+                    title: '📚 Story Building Game',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Build a story together! Click the cards to add to your adventure!</p>
+                        
+                        <div id="story-display" style="background: #f3f4f6; border-radius: 15px; padding: 20px; margin-bottom: 20px; min-height: 150px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px;">Your Story:</h4>
+                            <p id="story-text" style="color: #333; font-size: 18px; line-height: 1.8;">Once upon a time...</p>
+                        </div>
+                        
+                        <h4 style="color: #667eea; margin-bottom: 12px;">Choose what happens next:</h4>
+                        <div id="story-options" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <button class="activity-btn" onclick="addToStory('character')" style="margin-bottom: 0;">👤 Add Character</button>
+                            <button class="activity-btn" onclick="addToStory('place')" style="margin-bottom: 0;">🏰 Add Place</button>
+                            <button class="activity-btn" onclick="addToStory('action')" style="margin-bottom: 0;">⚡ Add Action</button>
+                            <button class="activity-btn" onclick="addToStory('feeling')" style="margin-bottom: 0;">💭 Add Feeling</button>
+                        </div>
+                        
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button class="btn-primary btn-play" onclick="resetStory()" style="flex: 1;">🔄 Start New Story</button>
+                            <button class="btn-primary btn-play" onclick="saveStory()" style="flex: 1;">💾 Save Story</button>
+                        </div>
+                    `
+                },
+                'thought-tracker': {
+                    title: '💭 Thought Tracker with Voice Assistant',
+                    content: `
+                        <p style="color: #666; margin-bottom: 16px;">Write or speak your thoughts and feelings.</p>
+                        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                            <button id="voice-btn" class="btn-primary btn-cbt" onclick="toggleVoice()" style="flex: 0 0 auto;">
+                                🎤 Start Voice
+                            </button>
+                            <button id="read-btn" class="btn-primary btn-cbt" onclick="readThought()" style="flex: 0 0 auto;">
+                                🔊 Read Aloud
+                            </button>
+                        </div>
+                        <div id="voice-status" style="color: #667eea; margin-bottom: 8px; min-height: 20px;"></div>
+                        <textarea id="thought-textarea" style="width: 100%; min-height: 150px; padding: 12px; border-radius: 12px; background: white; border: 2px solid #e5e7eb; color: #333; font-family: inherit; margin-bottom: 12px; font-size: 16px;" placeholder="What's on your mind? Click the microphone to speak or type here..."></textarea>
+                        <button class="btn-primary btn-cbt" onclick="saveThought()">💾 Save Thought</button>
+                        <div id="saved-thoughts" style="margin-top: 20px;"></div>
+                    `
+                },
+                'emotion-wheel': {
+                    title: '🎡 Emotion Wheel with Buddy',
+                    content: `
+                        <p style="color: #666; margin-bottom: 16px;">Meet Buddy! Click an emotion and Buddy will help you understand it!</p>
+                        
+                        <!-- Talking Tom-style Character -->
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <div id="buddy-character" style="position: relative; width: 200px; height: 200px; margin: 0 auto 16px; cursor: pointer;" onclick="buddyInteract()">
+                                <!-- Character Face -->
+                                <div id="buddy-face" style="width: 200px; height: 200px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 50%; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: all 0.5s ease;">
+                                    <!-- Eyes -->
+                                    <div style="position: absolute; top: 60px; left: 50px; width: 30px; height: 30px; background: white; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                                        <div id="buddy-left-eye" style="width: 15px; height: 15px; background: #333; border-radius: 50%; margin: 7px auto; transition: all 0.3s;"></div>
+                                    </div>
+                                    <div style="position: absolute; top: 60px; right: 50px; width: 30px; height: 30px; background: white; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                                        <div id="buddy-right-eye" style="width: 15px; height: 15px; background: #333; border-radius: 50%; margin: 7px auto; transition: all 0.3s;"></div>
+                                    </div>
+                                    
+                                    <!-- Mouth -->
+                                    <div id="buddy-mouth" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); width: 80px; height: 40px; border: 4px solid #333; border-top: none; border-radius: 0 0 40px 40px; transition: all 0.5s ease;"></div>
+                                    
+                                    <!-- Cheeks -->
+                                    <div id="buddy-left-cheek" style="position: absolute; top: 100px; left: 20px; width: 25px; height: 25px; background: rgba(255, 182, 193, 0); border-radius: 50%; transition: all 0.5s;"></div>
+                                    <div id="buddy-right-cheek" style="position: absolute; top: 100px; right: 20px; width: 25px; height: 25px; background: rgba(255, 182, 193, 0); border-radius: 50%; transition: all 0.5s;"></div>
+                                </div>
+                                
+                                <!-- Particle effects container -->
+                                <div id="buddy-particles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+                            </div>
+                            
+                            <!-- Speech Bubble -->
+                            <div id="buddy-speech" style="position: relative; background: white; border-radius: 20px; padding: 16px; max-width: 300px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none;">
+                                <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid white;"></div>
+                                <p id="buddy-message" style="color: #667eea; font-weight: 700; margin: 0; font-size: 16px;">Click an emotion to get started!</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Emotion Buttons -->
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Happy', '😊')" style="background: linear-gradient(135deg, #fef3c7, #fde68a);">😊 Happy</button>
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Sad', '😢')" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">😢 Sad</button>
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Angry', '😠')" style="background: linear-gradient(135deg, #fee2e2, #fecaca);">😠 Angry</button>
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Anxious', '😰')" style="background: linear-gradient(135deg, #e0e7ff, #c7d2fe);">😰 Anxious</button>
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Calm', '😌')" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0);">😌 Calm</button>
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Tired', '😴')" style="background: linear-gradient(135deg, #f3e8ff, #e9d5ff);">😴 Tired</button>
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Excited', '😃')" style="background: linear-gradient(135deg, #ffedd5, #fed7aa);">😃 Excited</button>
+                            <button class="activity-btn" onclick="selectEmotionWithBuddy('Confused', '😕')" style="background: linear-gradient(135deg, #f5f5f5, #e5e5e5);">😕 Confused</button>
+                        </div>
+                        
+                        <div id="emotion-feedback" style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 12px; display: none;">
+                            <h4 style="color: #667eea; margin-bottom: 10px;">You're feeling <span id="selected-emotion"></span></h4>
+                            <p id="emotion-tip" style="color: #666; line-height: 1.6;"></p>
+                        </div>
+                    `
+                },
+                'coping-cards': {
+                    title: '🃏 Coping Strategy Cards',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Click a card to reveal a helpful coping strategy!</p>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                            <div class="coping-card" onclick="revealStrategy(0)" style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                                <div class="card-front" style="font-size: 48px;">🎴</div>
+                                <div class="card-back" style="display: none; color: white;">
+                                    <h4 style="margin-bottom: 8px;">Deep Breathing</h4>
+                                    <p style="font-size: 14px;">Take 5 slow, deep breaths</p>
+                                </div>
+                            </div>
+                            <div class="coping-card" onclick="revealStrategy(1)" style="background: linear-gradient(135deg, #10b981, #84cc16); border-radius: 15px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                                <div class="card-front" style="font-size: 48px;">🎴</div>
+                                <div class="card-back" style="display: none; color: white;">
+                                    <h4 style="margin-bottom: 8px;">Count to 10</h4>
+                                    <p style="font-size: 14px;">Slowly count from 1 to 10</p>
+                                </div>
+                            </div>
+                            <div class="coping-card" onclick="revealStrategy(2)" style="background: linear-gradient(135deg, #f59e0b, #f97316); border-radius: 15px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                                <div class="card-front" style="font-size: 48px;">🎴</div>
+                                <div class="card-back" style="display: none; color: white;">
+                                    <h4 style="margin-bottom: 8px;">Talk to Someone</h4>
+                                    <p style="font-size: 14px;">Share your feelings with a trusted person</p>
+                                </div>
+                            </div>
+                            <div class="coping-card" onclick="revealStrategy(3)" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: 15px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                                <div class="card-front" style="font-size: 48px;">🎴</div>
+                                <div class="card-back" style="display: none; color: white;">
+                                    <h4 style="margin-bottom: 8px;">Move Your Body</h4>
+                                    <p style="font-size: 14px;">Jump, dance, or stretch</p>
+                                </div>
+                            </div>
+                            <div class="coping-card" onclick="revealStrategy(4)" style="background: linear-gradient(135deg, #14b8a6, #06b6d4); border-radius: 15px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                                <div class="card-front" style="font-size: 48px;">🎴</div>
+                                <div class="card-back" style="display: none; color: white;">
+                                    <h4 style="margin-bottom: 8px;">Draw or Write</h4>
+                                    <p style="font-size: 14px;">Express yourself creatively</p>
+                                </div>
+                            </div>
+                            <div class="coping-card" onclick="revealStrategy(5)" style="background: linear-gradient(135deg, #3b82f6, #06b6d4); border-radius: 15px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                                <div class="card-front" style="font-size: 48px;">🎴</div>
+                                <div class="card-back" style="display: none; color: white;">
+                                    <h4 style="margin-bottom: 8px;">Listen to Music</h4>
+                                    <p style="font-size: 14px;">Play your favorite calming song</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary btn-cbt" onclick="resetCards()" style="width: 100%;">🔄 Reset Cards</button>
+                    `
+                },
+                'body-scan': {
+                    title: '🌟 Body Scan Meditation',
+                    content: `
+                        <p style="color: var(--text-muted); margin-bottom: 16px;">Close your eyes and focus on each part of your body, from head to toe.</p>
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 100px; margin-bottom: 20px;">🧘</div>
+                            <button class="btn-primary btn-mindfulness" onclick="startBodyScan()">Start Body Scan (5 min)</button>
+                            <div id="body-scan-text" style="margin-top: 20px; font-size: 18px; color: var(--accent);"></div>
+                        </div>
+                    `
+                },
+                'yoga': {
+                    title: '🧘‍♀️ Kids Yoga Poses - Follow Along!',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Watch the videos and copy the poses! Hold each pose for 10-15 seconds.</p>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">🌳 Tree Pose - Cosmic Kids Yoga</h4>
+                            <div style="background: #f3f4f6; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                                <iframe width="100%" height="315" style="border-radius: 12px; max-width: 560px; display: block; margin: 0 auto;" src="https://www.youtube.com/embed/X655B4ISakg" title="Kids Yoga - Tree Pose" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6;">Stand on one leg, place the other foot on your inner thigh, and raise your arms above your head like tree branches!</p>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">🧘 Morning Yoga for Kids</h4>
+                            <div style="background: #f3f4f6; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                                <iframe width="100%" height="315" style="border-radius: 12px; max-width: 560px; display: block; margin: 0 auto;" src="https://www.youtube.com/embed/R-BS87NTV5I" title="Morning Yoga for Kids" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6;">A gentle morning yoga routine perfect for starting your day with energy and focus!</p>
+                        </div>
+
+
+                    `
+                },
+                'dance': {
+                    title: '💃 Dance Party - Move and Groove!',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Let's dance! Follow these fun moves and create your own dance!</p>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">🎵 Kids Dance Party</h4>
+                            <div style="background: #f3f4f6; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                                <iframe width="100%" height="315" style="border-radius: 12px; max-width: 560px; display: block; margin: 0 auto;" src="https://www.youtube.com/embed/388Q44ReOWE" title="Kids Dance Party" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6;">Dance freely to music! Great for releasing energy and having fun!</p>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">🕺 Just Dance Kids</h4>
+                            <div style="background: #f3f4f6; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                                <iframe width="100%" height="315" style="border-radius: 12px; max-width: 560px; display: block; margin: 0 auto;" src="https://www.youtube.com/embed/KhfkYzUwYFk" title="Just Dance Kids" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6;">Copy the dance moves you see! Try jumping, spinning, and waving your arms!</p>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">🎉 Freeze Dance Song</h4>
+                            <div style="background: #f3f4f6; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                                <iframe width="100%" height="315" style="border-radius: 12px; max-width: 560px; display: block; margin: 0 auto;" src="https://www.youtube.com/embed/2UcZWXvgMZE" title="Freeze Dance" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6;">Dance and FREEZE when the music stops! Great for practicing self-control!</p>
+                        </div>
+                    `
+                },
+                'energy-release': {
+                    title: '🏃 Energy Release Exercises',
+                    content: `
+                        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">Release extra energy with these fun exercises! Do each one for 30 seconds!</p>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">⭐ Jumping Jacks - GoNoodle</h4>
+                            <div style="background: #f3f4f6; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                                <iframe width="100%" height="315" style="border-radius: 12px; max-width: 560px; display: block; margin: 0 auto;" src="https://www.youtube.com/embed/c62Aqdlzvqk" title="Jumping Jacks for Kids" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6;">Jump and spread your arms and legs wide, then back together! Do 20 jumping jacks!</p>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px; font-size: 18px;">🌟 Kids Exercise - Workout Video</h4>
+                            <div style="background: #f3f4f6; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                                <iframe width="100%" height="315" style="border-radius: 12px; max-width: 560px; display: block; margin: 0 auto;" src="https://www.youtube.com/embed/L_A_HjHZxfI" title="Kids Workout" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6;">A fun high-energy workout to release all that extra energy! Follow along!</p>
+                        </div>
+
+
+                    `
+                }
+            };
+
+            const activity = activities[activityType] || { title: 'Activity', content: '<p>Activity coming soon!</p>' };
+            modalTitle.textContent = activity.title;
+            modalBody.innerHTML = activity.content;
+
+            // Initialize canvas if drawing activity
+            if (activityType === 'drawing' || activityType === 'emotion-art') {
+                setTimeout(() => initCanvas(activityType === 'drawing' ? 'drawing-canvas' : 'emotion-canvas'), 100);
+            }
+
+            // Save therapy session
+            saveTherapySession();
+        }
+
+        function closeModal() {
+            document.getElementById('activity-modal').classList.remove('active');
+        }
+
+        // Drawing canvas functionality
+        let canvas, ctx, isDrawing = false, currentColor = '#000000';
+
+        function initCanvas(canvasId) {
+            canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch support
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function setColor(color) {
+            currentColor = color;
+            ctx.strokeStyle = color;
+            document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveDrawing() {
+            alert('🎨 Great job! Your artwork has been saved!');
+            saveTherapySession();
+        }
+
+        // Music functions
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        function playNote(frequency) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.value = frequency;
+            osc.type = 'sine';
+            gain.gain.value = 0.3;
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        function playRhythm() {
+            const display = document.getElementById('rhythm-display');
+            const pattern = ['👏', '👏', '✋', '👏'];
+            let index = 0;
+
+            const interval = setInterval(() => {
+                if (index < pattern.length) {
+                    display.textContent = pattern[index];
+                    playNote(440);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    display.textContent = 'Your turn! Tap it back!';
+                }
+            }, 500);
+        }
+
+        function startBodyScan() {
+            const text = document.getElementById('body-scan-text');
+            const steps = [
+                'Focus on your head... relax your forehead...',
+                'Notice your shoulders... let them drop...',
+                'Feel your chest... breathe deeply...',
+                'Relax your arms and hands...',
+                'Notice your stomach... soft breathing...',
+                'Relax your legs and feet...',
+                'Feel your whole body relaxed and calm...'
+            ];
+
+            let index = 0;
+            text.textContent = steps[0];
+
+            const interval = setInterval(() => {
+                index++;
+                if (index < steps.length) {
+                    text.textContent = steps[index];
+                } else {
+                    clearInterval(interval);
+                    text.textContent = '✨ Great job! You completed the body scan!';
+                }
+            }, 40000); // ~40 seconds per step
+        }
+
+        // Music Playlist Functions
+        function loadPlaylist(mood) {
+            const player = document.getElementById('music-player');
+            const title = document.getElementById('playlist-title');
+            const embed = document.getElementById('player-embed');
+
+            const playlists = {
+                'happy': {
+                    title: '🌞 Happy & Energetic - "Happy" by Pharrell Williams',
+                    embed: '<iframe width="100%" height="315" style="border-radius: 12px;" src="https://www.youtube.com/embed/ZbZSe6N_BXs" title="Happy Song for Kids" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                },
+                'calm': {
+                    title: '😌 Calm & Peaceful - Relaxing Music for Kids',
+                    embed: '<iframe width="100%" height="315" style="border-radius: 12px;" src="https://www.youtube.com/embed/lTRiuFIWV54" title="Calm Music for Kids" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                },
+                'focus': {
+                    title: '💪 Motivated & Focused - Study Music for Kids',
+                    embed: '<iframe width="100%" height="315" style="border-radius: 12px;" src="https://www.youtube.com/embed/jfKfPfyJRdk" title="Focus Music for Kids" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                },
+                'sleep': {
+                    title: '😴 Sleepy & Relaxed - Lullaby for Kids',
+                    embed: '<iframe width="100%" height="315" style="border-radius: 12px;" src="https://www.youtube.com/embed/1ZYbU82GVz4" title="Sleep Music for Kids" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                }
+            };
+
+            const selected = playlists[mood];
+            title.textContent = selected.title;
+            embed.innerHTML = selected.embed;
+            player.style.display = 'block';
+        }
+
+        // Role-Play Functions
+        function showScenario(type) {
+            const display = document.getElementById('scenario-display');
+            const title = document.getElementById('scenario-title');
+            const desc = document.getElementById('scenario-desc');
+            const steps = document.getElementById('scenario-steps');
+
+            const scenarios = {
+                'friend': {
+                    title: '👋 Making New Friends',
+                    desc: 'Practice introducing yourself and starting a conversation!',
+                    steps: '<ol style="padding-left: 20px; color: #666;"><li>Smile and make eye contact</li><li>Say "Hi, my name is..."</li><li>Ask "What\'s your name?"</li><li>Find something in common: "Do you like...?"</li><li>Suggest playing together</li></ol>'
+                },
+                'share': {
+                    title: '🤝 Sharing and Taking Turns',
+                    desc: 'Learn how to share toys and take turns fairly!',
+                    steps: '<ol style="padding-left: 20px; color: #666;"><li>Ask politely: "Can I have a turn?"</li><li>Wait patiently for your turn</li><li>Use a timer if needed (2-3 minutes each)</li><li>Say "Thank you" when you get a turn</li><li>Offer to share back</li></ol>'
+                },
+                'feelings': {
+                    title: '💬 Expressing Feelings',
+                    desc: 'Practice telling others how you feel in a healthy way!',
+                    steps: '<ol style="padding-left: 20px; color: #666;"><li>Name your feeling: "I feel..."</li><li>Explain why: "...because..."</li><li>Say what you need: "I need..."</li><li>Use "I" statements, not blame</li><li>Take deep breaths if upset</li></ol>'
+                },
+                'problem': {
+                    title: '🧩 Solving Problems Together',
+                    desc: 'Work together to find solutions!',
+                    steps: '<ol style="padding-left: 20px; color: #666;"><li>Stay calm and listen</li><li>Explain the problem clearly</li><li>Think of 2-3 solutions together</li><li>Choose the fairest solution</li><li>Try it and see if it works</li></ol>'
+                }
+            };
+
+            const scenario = scenarios[type];
+            title.textContent = scenario.title;
+            desc.textContent = scenario.desc;
+            steps.innerHTML = scenario.steps;
+            display.style.display = 'block';
+        }
+
+        // Puppet Theater Functions
+        let currentPuppet = '🎭';
+        function selectPuppet(emoji) {
+            currentPuppet = emoji;
+            document.getElementById('puppet-display').textContent = emoji;
+            document.getElementById('puppet-dialogue').textContent = 'Ready to perform! Type what I should say!';
+
+            // Highlight selected puppet
+            document.querySelectorAll('.puppet-btn').forEach(btn => {
+                btn.style.borderColor = '#e5e7eb';
+                btn.style.transform = 'scale(1)';
+            });
+            event.target.style.borderColor = '#667eea';
+            event.target.style.transform = 'scale(1.1)';
+        }
+
+        function puppetSpeak() {
+            const text = document.getElementById('puppet-text').value;
+            if (!text) {
+                alert('Type something for your puppet to say!');
+                return;
+            }
+
+            const dialogue = document.getElementById('puppet-dialogue');
+            dialogue.textContent = `${currentPuppet}: "${text}"`;
+
+            // Speak if voice available
+            if (window.voiceAssistant) {
+                window.voiceAssistant.speak(text);
+            }
+
+            document.getElementById('puppet-text').value = '';
+        }
+
+        // Story Building Functions
+        let currentStory = 'Once upon a time...';
+
+        function addToStory(type) {
+            const storyText = document.getElementById('story-text');
+
+            const elements = {
+                'character': ['a brave knight', 'a clever fox', 'a friendly dragon', 'a curious child', 'a wise owl', 'a playful puppy'],
+                'place': ['in a magical forest', 'at a colorful castle', 'by the sparkling ocean', 'in a cozy treehouse', 'on a fluffy cloud', 'in a secret garden'],
+                'action': ['discovered a treasure', 'made a new friend', 'solved a puzzle', 'went on an adventure', 'helped someone', 'learned something new'],
+                'feeling': ['felt very happy', 'was excited', 'felt proud', 'was surprised', 'felt brave', 'was grateful']
+            };
+
+            const randomElement = elements[type][Math.floor(Math.random() * elements[type].length)];
+            currentStory += ' ' + randomElement;
+            storyText.textContent = currentStory;
+        }
+
+        function resetStory() {
+            currentStory = 'Once upon a time...';
+            document.getElementById('story-text').textContent = currentStory;
+        }
+
+        function saveStory() {
+            const stories = JSON.parse(localStorage.getItem('saved_stories') || '[]');
+            stories.push({ text: currentStory, date: new Date().toLocaleDateString() });
+            localStorage.setItem('saved_stories', JSON.stringify(stories));
+
+            if (window.mascot) window.mascot.showMessage('Story saved! 📚✨');
+            alert('Your story has been saved! Keep creating!');
+        }
+
+        // Emotion Wheel Functions
+        function selectEmotion(emotion, emoji) {
+            const feedback = document.getElementById('emotion-feedback');
+            const selected = document.getElementById('selected-emotion');
+            const tip = document.getElementById('emotion-tip');
+
+            const tips = {
+                'Happy': 'That\'s wonderful! Share your happiness with others and enjoy this feeling!',
+                'Sad': 'It\'s okay to feel sad. Talk to someone you trust or do something you enjoy.',
+                'Angry': 'Take deep breaths and count to 10. It\'s okay to feel angry, but express it safely.',
+                'Anxious': 'Try the 5-4-3-2-1 technique: Name 5 things you see, 4 you hear, 3 you touch, 2 you smell, 1 you taste.',
+                'Calm': 'Great! This is a peaceful feeling. Notice how your body feels when you\'re calm.',
+                'Tired': 'Your body might need rest. Take a break, drink water, or do some gentle stretches.',
+                'Excited': 'Awesome! Use this energy for something fun or creative!',
+                'Confused': 'That\'s okay! Ask questions and take your time to understand things better.'
+            };
+
+            selected.textContent = `${emoji} ${emotion}`;
+            tip.textContent = tips[emotion];
+            feedback.style.display = 'block';
+
+            if (window.gamification) window.gamification.completeActivity('emotion-check', 5);
+        }
+
+        // Coping Cards Functions
+        function revealStrategy(index) {
+            const cards = document.querySelectorAll('.coping-card');
+            const card = cards[index];
+            const front = card.querySelector('.card-front');
+            const back = card.querySelector('.card-back');
+
+            if (front.style.display !== 'none') {
+                front.style.display = 'none';
+                back.style.display = 'block';
+            } else {
+                front.style.display = 'block';
+                back.style.display = 'none';
+            }
+        }
+
+        function resetCards() {
+            document.querySelectorAll('.coping-card').forEach(card => {
+                card.querySelector('.card-front').style.display = 'block';
+                card.querySelector('.card-back').style.display = 'none';
+            });
+        }
+
+        // Save therapy session
+        async function saveTherapySession() {
+            try {
+                const currentProgress = await fetch(`${API_URL}/progress/${currentUser.id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r => r.json());
+
+                await fetch(`${API_URL}/progress`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        focusMinutes: currentProgress.focus_minutes || 0,
+                        gamesPlayed: currentProgress.games_played || 0,
+                        relaxSessions: currentProgress.relax_sessions || 0,
+                        stars: (currentProgress.stars || 0) + 1,
+                        streak: currentProgress.streak || 0,
+                        bestReaction: currentProgress.best_reaction,
+                        heartRate: null
+                    })
+                });
+
+                therapySessions++;
+                document.getElementById('therapy-sessions').textContent = therapySessions;
+            } catch (error) {
+                console.error('Error saving therapy session:', error);
+            }
+        }
+
+        async function loadProgress() {
+            try {
+                const response = await fetch(`${API_URL}/progress/${currentUser.id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                therapySessions = 0; // Reset for today
+                document.getElementById('therapy-sessions').textContent = therapySessions;
+            } catch (error) {
+                console.error('Error loading progress:', error);
+            }
+        }
+
+        // Close modal on outside click
+        document.getElementById('activity-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'activity-modal') {
+                closeModal();
+            }
+        });
+    </script>
+    <script src="gamification.js"></script>
+    <script src="mascot.js"></script>
+    <script>
+        // Integrate gamification
+        if (window.mascot) {
+            window.mascot.onActivityStart('therapy');
+        }
+
+        // Override saveTherapySession to use gamification
+        const originalSaveTherapySession = saveTherapySession;
+        saveTherapySession = async function () {
+            await originalSaveTherapySession();
+            if (window.gamification) {
+                window.gamification.completeActivity('therapy', 15);
+            }
+            if (window.mascot) {
+                window.mascot.celebrate();
+            }
+        };
+    </script>
+    <script src="voice-assistant.js"></script>
+    <script>
+        // Voice Assistant Functions for Thought Tracker
+        let isVoiceActive = false;
+
+        function toggleVoice() {
+            const voiceBtn = document.getElementById('voice-btn');
+            const voiceStatus = document.getElementById('voice-status');
+            const textarea = document.getElementById('thought-textarea');
+
+            if (!window.voiceAssistant) {
+                voiceStatus.textContent = '❌ Voice not supported in this browser';
+                return;
+            }
+
+            if (!isVoiceActive) {
+                const success = window.voiceAssistant.startListening((transcript, isInterim) => {
+                    textarea.value = transcript;
+                    voiceStatus.textContent = isInterim ? '🎤 Listening...' : '✅ Complete';
+                });
+
+                if (success) {
+                    isVoiceActive = true;
+                    voiceBtn.textContent = '⏹️ Stop Voice';
+                    voiceBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                } else {
+                    voiceStatus.textContent = '❌ Could not start voice';
+                }
+            } else {
+                window.voiceAssistant.stopListening();
+                isVoiceActive = false;
+                voiceBtn.textContent = '🎤 Start Voice';
+                voiceBtn.style.background = '';
+                voiceStatus.textContent = '';
+            }
+        }
+
+        function readThought() {
+            const textarea = document.getElementById('thought-textarea');
+            const text = textarea.value.trim();
+            if (!text) {
+                alert('Please write something first!');
+                return;
+            }
+            if (window.voiceAssistant) {
+                window.voiceAssistant.speak(text);
+            }
+        }
+
+        function saveThought() {
+            const textarea = document.getElementById('thought-textarea');
+            const text = textarea.value.trim();
+            if (!text) return;
+
+            const thoughts = JSON.parse(localStorage.getItem('saved_thoughts') || '[]');
+            thoughts.push({ text, timestamp: new Date().toISOString(), date: new Date().toLocaleDateString() });
+            localStorage.setItem('saved_thoughts', JSON.stringify(thoughts));
+
+            if (window.mascot) window.mascot.showMessage('Thought saved! 💭✨');
+            textarea.value = '';
+            displaySavedThoughts();
+            if (window.gamification) window.gamification.completeActivity('thought-tracker', 5);
+        }
+
+        function displaySavedThoughts() {
+            const container = document.getElementById('saved-thoughts');
+            if (!container) return;
+            const thoughts = JSON.parse(localStorage.getItem('saved_thoughts') || '[]').slice(-3).reverse();
+            container.innerHTML = thoughts.length ? `<h4 style="margin-bottom: 12px;">Recent Thoughts:</h4>${thoughts.map(t => `<div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 8px; margin-bottom: 8px;"><div style="font-size: 14px;">${t.text}</div><div style="font-size: 12px; color: var(--text-muted);">${t.date}</div></div>`).join('')}` : '<p style="color: var(--text-muted); font-style: italic;">No saved thoughts yet.</p>';
+        }
+
+        // Manual therapy completion
+        async function completeTherapySession() {
+            try {
+                const response = await fetch(`${API_URL}/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ userId: currentUser.id, focusMinutes: 0, stars: 1 })
+                });
+                if (response.ok) {
+                    therapySessions++;
+                    document.getElementById('therapy-sessions').textContent = therapySessions;
+                    if (window.gamification) window.gamification.completeActivity('therapy', 15);
+                    if (window.mascot) window.mascot.celebrate();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Add completion button to activities
+        const originalOpenActivity = openActivity;
+        openActivity = function (activityType) {
+            originalOpenActivity(activityType);
+            setTimeout(() => {
+                const modalBody = document.getElementById('modal-body');
+                if (modalBody && !document.getElementById('complete-activity-btn')) {
+                    const btn = document.createElement('button');
+                    btn.id = 'complete-activity-btn';
+                    btn.className = 'btn-primary btn-art';
+                    btn.textContent = '✅ Mark as Complete';
+                    btn.style.marginTop = '20px';
+                    btn.style.width = '100%';
+                    btn.onclick = () => { completeTherapySession(); closeModal(); };
+                    modalBody.appendChild(btn);
+                }
+                if (activityType === 'thought-tracker') displaySavedThoughts();
+            }, 100);
+        };
+
+        // Buddy Character Functions (Talking Tom-style)
+        function selectEmotionWithBuddy(emotion, emoji) {
+            const feedback = document.getElementById('emotion-feedback');
+            const selected = document.getElementById('selected-emotion');
+            const tip = document.getElementById('emotion-tip');
+            const buddySpeech = document.getElementById('buddy-speech');
+            const buddyMessage = document.getElementById('buddy-message');
+
+            const tips = {
+                'Happy': 'That\'s wonderful! Share your happiness with others and enjoy this feeling!',
+                'Sad': 'It\'s okay to feel sad. Talk to someone you trust or do something you enjoy.',
+                'Angry': 'Take deep breaths and count to 10. It\'s okay to feel angry, but express it safely.',
+                'Anxious': 'Try the 5-4-3-2-1 technique: Name 5 things you see, 4 you hear, 3 you touch, 2 you smell, 1 you taste.',
+                'Calm': 'Great! This is a peaceful feeling. Notice how your body feels when you\'re calm.',
+                'Tired': 'Your body might need rest. Take a break, drink water, or do some gentle stretches.',
+                'Excited': 'Awesome! Use this energy for something fun or creative!',
+                'Confused': 'That\'s okay! Ask questions and take your time to understand things better.'
+            };
+
+            selected.textContent = `${emoji} ${emotion}`;
+            tip.textContent = tips[emotion];
+            feedback.style.display = 'block';
+            buddyMessage.textContent = tips[emotion];
+            buddySpeech.style.display = 'block';
+
+            changeBuddyExpression(emotion);
+            speakBuddyMessage(tips[emotion]);
+            createParticles(emotion);
+
+            if (window.gamification) window.gamification.completeActivity('emotion-check', 5);
+        }
+
+        function changeBuddyExpression(emotion) {
+            const face = document.getElementById('buddy-face');
+            const mouth = document.getElementById('buddy-mouth');
+            const leftEye = document.getElementById('buddy-left-eye');
+            const rightEye = document.getElementById('buddy-right-eye');
+            const leftCheek = document.getElementById('buddy-left-cheek');
+            const rightCheek = document.getElementById('buddy-right-cheek');
+
+            if (!face) return;
+
+            const expressions = {
+                'Happy': { face: 'linear-gradient(135deg, #fbbf24, #f59e0b)', mouth: '0 0 40px 40px', cheeks: 'rgba(255, 182, 193, 0.6)', eyeScale: 1 },
+                'Sad': { face: 'linear-gradient(135deg, #93c5fd, #60a5fa)', mouth: '40px 40px 0 0', cheeks: 'rgba(255, 182, 193, 0)', eyeScale: 1 },
+                'Angry': { face: 'linear-gradient(135deg, #f87171, #ef4444)', mouth: '0', cheeks: 'rgba(255, 100, 100, 0.4)', eyeScale: 1.2 },
+                'Anxious': { face: 'linear-gradient(135deg, #c7d2fe, #a5b4fc)', mouth: '50%', cheeks: 'rgba(200, 200, 255, 0.3)', eyeScale: 1.1 },
+                'Calm': { face: 'linear-gradient(135deg, #6ee7b7, #34d399)', mouth: '0 0 30px 30px', cheeks: 'rgba(182, 255, 193, 0.3)', eyeScale: 1 },
+                'Tired': { face: 'linear-gradient(135deg, #d8b4fe, #c084fc)', mouth: '50%', cheeks: 'rgba(220, 200, 255, 0.3)', eyeScale: 0.3 },
+                'Excited': { face: 'linear-gradient(135deg, #fdba74, #fb923c)', mouth: '0 0 50px 50px', cheeks: 'rgba(255, 200, 150, 0.6)', eyeScale: 1.3 },
+                'Confused': { face: 'linear-gradient(135deg, #d1d5db, #9ca3af)', mouth: '0 20px 20px 0', cheeks: 'rgba(200, 200, 200, 0.2)', eyeScale: 1 }
+            };
+
+            const expr = expressions[emotion];
+            if (expr) {
+                face.style.background = expr.face;
+                mouth.style.borderRadius = expr.mouth;
+                leftCheek.style.background = expr.cheeks;
+                rightCheek.style.background = expr.cheeks;
+                leftEye.style.transform = `scaleY(${expr.eyeScale})`;
+                rightEye.style.transform = `scaleY(${expr.eyeScale})`;
+                face.style.transform = 'scale(1.1)';
+                setTimeout(() => face.style.transform = 'scale(1)', 300);
+            }
+        }
+
+        function speakBuddyMessage(message) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(message);
+                utterance.rate = 0.9;
+                utterance.pitch = 1.2;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function createParticles(emotion) {
+            const container = document.getElementById('buddy-particles');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const colors = {
+                'Happy': ['#fbbf24', '#f59e0b'], 'Sad': ['#93c5fd', '#60a5fa'], 'Angry': ['#f87171', '#ef4444'],
+                'Anxious': ['#c7d2fe', '#a5b4fc'], 'Calm': ['#6ee7b7', '#34d399'], 'Tired': ['#d8b4fe', '#c084fc'],
+                'Excited': ['#fdba74', '#fb923c'], 'Confused': ['#d1d5db', '#9ca3af']
+            };
+
+            const particleColors = colors[emotion] || colors['Happy'];
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                const size = Math.random() * 8 + 4;
+                particle.style.cssText = `position: absolute; width: ${size}px; height: ${size}px; background: ${particleColors[i % 2]}; border-radius: 50%; top: 50%; left: 50%; opacity: 1; pointer-events: none;`;
+                container.appendChild(particle);
+
+                const angle = (Math.PI * 2 * i) / 12;
+                const distance = 100;
+                particle.animate([
+                    { transform: 'translate(0, 0)', opacity: 1 },
+                    { transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`, opacity: 0 }
+                ], { duration: 800, easing: 'ease-out' }).onfinish = () => particle.remove();
+            }
+        }
+
+        function buddyInteract() {
+            const face = document.getElementById('buddy-face');
+            const buddySpeech = document.getElementById('buddy-speech');
+            const buddyMessage = document.getElementById('buddy-message');
+            if (!face) return;
+
+            face.style.transform = 'scale(1.15) rotate(5deg)';
+            setTimeout(() => face.style.transform = 'scale(1) rotate(0deg)', 200);
+
+            if (buddySpeech.style.display === 'none' || !buddySpeech.style.display) {
+                buddyMessage.textContent = 'Hi! Click an emotion to see how I can help!';
+                buddySpeech.style.display = 'block';
+                speakBuddyMessage('Hi! Click an emotion to see how I can help!');
+            } else {
+                buddySpeech.style.display = 'none';
+            }
+            createParticles('Happy');
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,548 @@
+/* Child-Friendly Duolingo-Style CSS */
+/* Playful, colorful, and engaging design for ADHD kids */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+/* ========== Global Child-Friendly Overrides ========== */
+* {
+    font-family: 'Nunito', 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+h1, h2, h3 {
+    font-family: 'Fredoka One', 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+/* ========== Mascot Styles ========== */
+.mascot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.mascot-character {
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    animation: float 3s ease-in-out infinite;
+    transition: transform 0.3s;
+}
+
+.mascot-character:hover {
+    transform: scale(1.1);
+}
+
+.mascot-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+.mascot-speech-bubble {
+    position: absolute;
+    bottom: 130px;
+    right: 0;
+    background: white;
+    border-radius: 20px;
+    padding: 15px 20px;
+    max-width: 250px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+}
+
+.mascot-speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid white;
+}
+
+.mascot-speech-bubble.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.speech-text {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Mascot Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+@keyframes jump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+}
+
+/* ========== Gamification UI ========== */
+.gamification-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 25px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: white;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.level-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.level-badge {
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    border: 3px solid rgba(255,255,255,0.5);
+}
+
+.level-info h2 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.level-info p {
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.xp-bar-container {
+    background: rgba(0,0,0,0.2);
+    border-radius: 20px;
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+}
+
+.xp-bar {
+    background: linear-gradient(90deg, #ffd700, #ffed4e);
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.xp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 700;
+    font-size: 14px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.streak-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border-radius: 20px;
+    padding: 15px;
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+}
+
+/* ========== XP Notification ========== */
+.xp-notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+    padding: 15px 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+    z-index: 10000;
+    animation: slideInRight 0.5s, slideOutRight 0.5s 2.5s;
+    font-weight: 700;
+}
+
+.xp-amount {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.xp-reason {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+/* ========== Celebration Modal ========== */
+.celebration-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    animation: fadeIn 0.3s;
+}
+
+.celebration-content {
+    background: white;
+    border-radius: 30px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    position: relative;
+    animation: bounceIn 0.6s;
+}
+
+.celebration-content h2 {
+    font-size: 36px;
+    margin-bottom: 15px;
+    color: #667eea;
+}
+
+.celebration-content p {
+    font-size: 20px;
+    margin-bottom: 25px;
+    color: #666;
+}
+
+.celebration-content button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.celebration-content button:hover {
+    transform: scale(1.05);
+}
+
+/* Confetti Animation */
+.confetti {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #f00;
+    top: -10px;
+    animation: confettiFall 3s linear infinite;
+}
+
+@keyframes confettiFall {
+    to {
+        transform: translateY(600px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ========== Big Friendly Buttons ========== */
+.btn-friendly {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 18px 35px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    min-height: 60px;
+}
+
+.btn-friendly:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.btn-friendly:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* ========== Achievement Badge ========== */
+.achievement-badge {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    border: 3px solid transparent;
+}
+
+.achievement-badge.earned {
+    border-color: #ffd700;
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
+.achievement-badge.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.achievement-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.achievement-name {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.achievement-desc {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ========== Learning Path ========== */
+.learning-path {
+    position: relative;
+    padding: 40px 20px;
+}
+
+.path-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.path-node {
+    position: relative;
+    margin: 30px auto;
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 4px solid #667eea;
+    z-index: 1;
+}
+
+.path-node:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.path-node.completed {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.path-node.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+/* ========== Emotion Detection UI ========== */
+.emotion-container {
+    background: white;
+    border-radius: 25px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.camera-feed {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+}
+
+.camera-feed video {
+    width: 100%;
+    display: block;
+    transform: scaleX(-1); /* Mirror effect */
+}
+
+.face-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.emotion-display {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.emotion-item {
+    text-align: center;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 15px;
+    min-width: 100px;
+    transition: all 0.3s;
+}
+
+.emotion-item.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    transform: scale(1.1);
+}
+
+.emotion-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.emotion-label {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.emotion-confidence {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .mascot-container {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .mascot-character {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .mascot-speech-bubble {
+        max-width: 200px;
+        bottom: 90px;
+    }
+    
+    .gamification-header {
+        padding: 15px;
+    }
+    
+    .level-badge {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}
+
+/* ========== Accessibility ========== */
+.btn-friendly:focus,
+.path-node:focus {
+    outline: 3px solid #ffd700;
+    outline-offset: 3px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

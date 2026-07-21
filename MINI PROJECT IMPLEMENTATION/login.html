@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Login - ADHD Assist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea" />
+    <meta name="description" content="ADHD Assist - Your friendly ADHD learning companion" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <style>
+        :root {
+            --bg: #020617;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --accent: #22d3ee
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px
+        }
+
+        .card {
+            background: radial-gradient(circle at top, #0b1120, #020617);
+            border-radius: 24px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            padding: 32px;
+            max-width: 450px;
+            width: 100%
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 20% 20%, #22d3ee, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 32px;
+            color: #020617;
+            margin: 0 auto 20px
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 28px
+        }
+
+        p {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 14px
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: rgba(15, 23, 42, 0.95);
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: center
+        }
+
+        .tab.active {
+            background: rgba(34, 211, 238, 0.12);
+            border-color: rgba(34, 211, 238, 0.9);
+            color: var(--text-main)
+        }
+
+        .field {
+            margin-bottom: 16px
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: rgba(15, 23, 42, 0.98);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 14px
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 999px;
+            border: none;
+            background: radial-gradient(circle at top left, #22d3ee, #6366f1);
+            color: #020617;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 8px
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 14px
+        }
+
+        .hidden {
+            display: none
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="logo">A</div>
+        <h1>ADHD Assist</h1>
+        <p>Login or create an account to get started</p>
+
+        <div class="tabs">
+            <button class="tab active" id="tab-login">Login</button>
+            <button class="tab" id="tab-register">Register</button>
+        </div>
+
+        <div id="error-msg"></div>
+
+        <!-- Login Form -->
+        <form id="login-form">
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="login-email" placeholder="your@email.com" required />
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="Enter password" required />
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" class="hidden">
+            <div class="field">
+                <label>Name</label>
+                <input type="text" id="reg-name" placeholder="Your name" required />
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="reg-email" placeholder="your@email.com" required />
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="reg-password" placeholder="Create password" required />
+            </div>
+            <div class="field">
+                <label>Account Type</label>
+                <select id="reg-role" required>
+                    <option value="child">Child</option>
+                    <option value="parent">Parent</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="therapist">Therapist</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Parent Email (optional)</label>
+                <input type="email" id="reg-parent-email" placeholder="parent@example.com" />
+            </div>
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        // Tab switching
+        document.getElementById('tab-login').addEventListener('click', () => {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('tab-login').classList.add('active');
+            document.getElementById('tab-register').classList.remove('active');
+        });
+
+        document.getElementById('tab-register').addEventListener('click', () => {
+            document.getElementById('register-form').classList.remove('hidden');
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('tab-register').classList.add('active');
+            document.getElementById('tab-login').classList.remove('active');
+        });
+
+        function showError(msg) {
+            const errorDiv = document.getElementById('error-msg');
+            errorDiv.innerHTML = `<div class="error">${msg}</div>`;
+            setTimeout(() => errorDiv.innerHTML = '', 5000);
+        }
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Login failed');
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                showError(error.message);
+            }
+        });
+
+        // Register
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
+            const parentEmail = document.getElementById('reg-parent-email').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, role, parentEmail })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Registration failed');
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                showError(error.message);
+            }
+        });
+
+        // Check if already logged in
+        if (localStorage.getItem('token')) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+
+    <!-- PWA Install Handler -->
+    <script src="/pwa-install.js"></script>
+</body>
+
+</html>

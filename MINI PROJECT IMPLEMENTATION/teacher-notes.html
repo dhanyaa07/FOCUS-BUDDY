@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teacher Notes - ADHD Assist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root{--bg:#020617;--text-main:#e5e7eb;--text-muted:#9ca3af;--accent:#22d3ee;--radius-xl:24px;--radius-lg:18px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top,#1f2937 0,#020617 55%);color:var(--text-main);min-height:100vh;padding:20px}
+    .container{max-width:1200px;margin:0 auto}
+    .header{background:radial-gradient(circle at top,#0b1120,#020617);border-radius:var(--radius-xl);border:1px solid rgba(148,163,184,0.6);padding:20px;margin-bottom:20px}
+    .header h1{font-size:24px;margin-bottom:8px}
+    .header p{color:var(--text-muted);font-size:14px}
+    .card{background:rgba(15,23,42,0.97);border:1px solid rgba(31,41,55,0.9);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px}
+    .form-group{margin-bottom:16px}
+    label{display:block;margin-bottom:6px;font-weight:600;font-size:14px}
+    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(148,163,184,0.7);background:rgba(15,23,42,0.98);color:var(--text-main);font-family:inherit}
+    textarea{min-height:120px;resize:vertical}
+    .btn{padding:10px 20px;border-radius:999px;border:none;background:radial-gradient(circle at top left,#22d3ee,#6366f1);color:#020617;font-weight:600;cursor:pointer;font-size:14px}
+    .btn:hover{opacity:0.9}
+    .btn-secondary{background:rgba(148,163,184,0.2);color:var(--text-main)}
+    .btn-danger{background:linear-gradient(to right,#ef4444,#dc2626);color:white}
+    .notes-list{display:flex;flex-direction:column;gap:12px}
+    .note-item{background:rgba(15,23,42,0.95);border:1px solid rgba(31,41,55,0.9);border-radius:12px;padding:16px}
+    .note-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:10px}
+    .note-meta{font-size:12px;color:var(--text-muted)}
+    .note-category{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.5);font-size:11px;margin-left:8px}
+    .note-content{line-height:1.6;margin-bottom:10px}
+    .note-actions{display:flex;gap:8px}
+    .note-actions button{padding:6px 12px;font-size:12px}
+    .back-link{display:inline-block;margin-bottom:20px;color:var(--accent);text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .loading{text-align:center;padding:40px;color:var(--text-muted)}
+    .error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.5);color:#fca5a5;padding:12px;border-radius:10px;margin-bottom:16px}
+    .success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.5);color:#86efac;padding:12px;border-radius:10px;margin-bottom:16px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:768px){.grid-2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← Back to Dashboard</a>
+    
+    <div class="header">
+      <h1>📝 Teacher Notes</h1>
+      <p>Record observations and progress updates for students</p>
+    </div>
+
+    <div id="message-area"></div>
+
+    <!-- Create Note Form -->
+    <div class="card">
+      <h2 style="margin-bottom:16px;font-size:18px">Create New Note</h2>
+      <form id="note-form">
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="child-select">Select Student *</label>
+            <select id="child-select" required>
+              <option value="">-- Select a student --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category">
+              <option value="">-- Select category --</option>
+              <option value="behavior">Behavior</option>
+              <option value="academic">Academic Progress</option>
+              <option value="social">Social Skills</option>
+              <option value="attention">Attention & Focus</option>
+              <option value="general">General Observation</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="note-text">Note *</label>
+          <textarea id="note-text" placeholder="Enter your observations about the student..." required></textarea>
+        </div>
+        <button type="submit" class="btn">Save Note</button>
+      </form>
+    </div>
+
+    <!-- Notes History -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2 style="font-size:18px">Recent Notes</h2>
+        <div>
+          <label for="filter-child" style="display:inline;margin-right:8px;font-size:13px">Filter by student:</label>
+          <select id="filter-child" style="width:auto;padding:6px;font-size:13px">
+            <option value="">All Students</option>
+          </select>
+        </div>
+      </div>
+      <div id="notes-list" class="notes-list">
+        <div class="loading">Loading notes...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+    let currentUser = null;
+    let allNotes = [];
+    let allChildren = [];
+
+    // Check authentication
+    function checkAuth() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = 'index.html';
+        return false;
+      }
+
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        currentUser = JSON.parse(userData);
+        if (currentUser.role !== 'teacher' && currentUser.role !== 'therapist') {
+          alert('Access denied. This page is for teachers only.');
+          window.location.href = 'index.html';
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // API calls
+    async function apiCall(endpoint, options = {}) {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+      };
+
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        headers: { ...headers, ...options.headers }
+      });
+
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+        throw new Error('Unauthorized');
+      }
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    // Show message
+    function showMessage(message, type = 'success') {
+      const messageArea = document.getElementById('message-area');
+      messageArea.innerHTML = `<div class="${type}">${message}</div>`;
+      setTimeout(() => { messageArea.innerHTML = ''; }, 5000);
+    }
+
+    // Load children list
+    async function loadChildren() {
+      try {
+        allChildren = await apiCall('/teacher-notes/children');
+        const childSelect = document.getElementById('child-select');
+        const filterSelect = document.getElementById('filter-child');
+        
+        allChildren.forEach(child => {
+          childSelect.innerHTML += `<option value="${child.id}">${child.name}</option>`;
+          filterSelect.innerHTML += `<option value="${child.id}">${child.name}</option>`;
+        });
+      } catch (error) {
+        showMessage('Error loading students: ' + error.message, 'error');
+      }
+    }
+
+    // Load notes
+    async function loadNotes() {
+      try {
+        allNotes = await apiCall(`/teacher-notes/teacher/${currentUser.id}`);
+        displayNotes();
+      } catch (error) {
+        document.getElementById('notes-list').innerHTML = `<div class="error">Error loading notes: ${error.message}</div>`;
+      }
+    }
+
+    // Display notes
+    function displayNotes() {
+      const filterValue = document.getElementById('filter-child').value;
+      const filteredNotes = filterValue 
+        ? allNotes.filter(note => note.child_id == filterValue)
+        : allNotes;
+
+      const notesList = document.getElementById('notes-list');
+      
+      if (filteredNotes.length === 0) {
+        notesList.innerHTML = '<div class="loading">No notes found</div>';
+        return;
+      }
+
+      notesList.innerHTML = filteredNotes.map(note => `
+        <div class="note-item">
+          <div class="note-header">
+            <div>
+              <strong>${note.child_name}</strong>
+              ${note.category ? `<span class="note-category">${note.category}</span>` : ''}
+              <div class="note-meta">
+                ${new Date(note.date).toLocaleDateString()} • 
+                ${new Date(note.created_at).toLocaleTimeString()}
+              </div>
+            </div>
+            <div class="note-actions">
+              <button class="btn btn-secondary" onclick="editNote(${note.id})">Edit</button>
+              <button class="btn btn-danger" onclick="deleteNote(${note.id})">Delete</button>
+            </div>
+          </div>
+          <div class="note-content">${note.note}</div>
+        </div>
+      `).join('');
+    }
+
+    // Create note
+    document.getElementById('note-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const childId = parseInt(document.getElementById('child-select').value);
+      const category = document.getElementById('category').value;
+      const noteText = document.getElementById('note-text').value;
+
+      try {
+        await apiCall('/teacher-notes', {
+          method: 'POST',
+          body: JSON.stringify({
+            childId,
+            note: noteText,
+            category: category || null
+          })
+        });
+
+        showMessage('Note saved successfully!');
+        document.getElementById('note-form').reset();
+        loadNotes();
+      } catch (error) {
+        showMessage('Error saving note: ' + error.message, 'error');
+      }
+    });
+
+    // Delete note
+    async function deleteNote(noteId) {
+      if (!confirm('Are you sure you want to delete this note?')) return;
+
+      try {
+        await apiCall(`/teacher-notes/${noteId}`, { method: 'DELETE' });
+        showMessage('Note deleted successfully!');
+        loadNotes();
+      } catch (error) {
+        showMessage('Error deleting note: ' + error.message, 'error');
+      }
+    }
+
+    // Edit note (simplified - just shows prompt)
+    async function editNote(noteId) {
+      const note = allNotes.find(n => n.id === noteId);
+      if (!note) return;
+
+      const newText = prompt('Edit note:', note.note);
+      if (!newText || newText === note.note) return;
+
+      try {
+        await apiCall(`/teacher-notes/${noteId}`, {
+          method: 'PUT',
+          body: JSON.stringify({ note: newText })
+        });
+        showMessage('Note updated successfully!');
+        loadNotes();
+      } catch (error) {
+        showMessage('Error updating note: ' + error.message, 'error');
+      }
+    }
+
+    // Filter notes
+    document.getElementById('filter-child').addEventListener('change', displayNotes);
+
+    // Initialize
+    if (checkAuth()) {
+      loadChildren();
+      loadNotes();
+    }
+  </script>
+</body>
+</html>
